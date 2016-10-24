@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+	<title>WebDriverTest</title>
+</head>
+<body id="webdriver-test-main">
+	<style>
+		.example {
+			width: 200px;
+			height: 100px;
+			border: 1px solid black;
+		}
+	</style>
+    <span>textOne</span>
+    <span>textOne</span>
+    <span>---textTwo---</span>
+    <span>~~~textTwo~~~</span>
+	<div id="e_draggable" class="ui-draggable example">
+	  <p>Draggable</p>
+	</div>
+
+	<script>
+		( function($){
+
+			$( function(){
+				$( ".ui-draggable" ).draggable();
+			} );
+
+		} )( jQuery );
+	</script>
+
+    <ul id="ires">
+        <li class="gtest">Selenide here</li>
+        <li class="gtest">Selenide not found</li>
+        <li class="gtest">Selenide not found</li>
+        <li class="gtest">Selenide not found</li>
+        <li class="gtest">Selenide not found</li>
+        <li class="gtest">Selenide not found</li>
+        <li class="gtest">Selenide not found</li>
+        <li class="gtest">Selenide not found</li>
+        <li class="gtest">Selenide not found</li>
+        <li class="gtest">Selenide not found</li>
+    </ul>
+
+    <div id="childOne">
+        <div class="child">Child One</div>
+    </div>
+    <div id="childTwo">
+        <div class="child">Child Two</div>
+    </div>
+
+    <form id="testFrm">
+        <select id="e_select2">
+            <option value="1">V1Z</option>
+            <option value="2">V2Z</option>
+            <option value="3">V3Z</option>
+            <option value="4">V4Z</option>
+        </select>
+        <br>
+        <label for="e_textarea">TEXTAREA</label>
+        <textarea id="e_textarea" cols="30" rows="5"></textarea>
+        <br>
+        <label for="e_string">StringField</label>
+        <input type="text" id="e_string" />
+        <br>
+        <label for="e_select">SELECT</label>
+        <select id="e_select">
+            <option value="1">V1</option>
+            <option value="2">V2</option>
+            <option value="3">V3</option>
+            <option value="4">V4</option>
+        </select>
+        <br>
+        <label for="e_select_opt">SELECT_OPTGROUP</label>
+        <select id="e_select_opt">
+            <optgroup label="group 1">
+                <option value="1">V1</option>
+                <option value="2">V2</option>
+            </optgroup>
+            <optgroup label="group 2">
+                <option value="3">V3</option>
+                <option value="4">V4</option>
+            </optgroup>
+        </select>
+        <br>
+        <input id="e_button" type="button" value="0" size="10" onclick="this.value = Number(this.value)+1"><br>
+		<input id="el_disabled" type="text" value="DISABLED" disabled="disabled"><br>
+		<input id="el_enabled" type="text" value="ENABLED"><br>
+		<input id="el_hidden" type="text" value="DISPLAY_NONE" style="display:none;"><br>
+		<input id="promt_button" type="button" value="PROMT" onclick="var v=prompt('Enter your name','Name');if (v){this.value=v;}"><br>
+    </form>
+
+<div id="fixed_size" style="width:140px;height:100px;border: 1px solid red;">fixed size</div>
+<iframe name="testframe" style="width:300px;height:150px;border:1px solid green;" src="./webdriverframe.html"/>
+<div style="width:400px;height:1000px;">BIG DIV</div>
+<br>
+<div id="lower_element">lower</div>
+
+</body>
+</html>
