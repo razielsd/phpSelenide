@@ -35,7 +35,7 @@ class Driver
         $this->webDriver->getDriver()->setDesiredCapability(
             'browserName', 'firefox'
         );
-        $this->webDriver->connect();
+        $this->webDriver->connect($this->selenide->configuration()->sessionId);
     }
 
 
