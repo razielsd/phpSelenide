@@ -4,6 +4,8 @@ namespace Selenide;
 class Condition
 {
     /**
+     * Checks that collection has the given size
+     *
      * @param $size
      * @return Condition_Size
      */
@@ -11,6 +13,19 @@ class Condition
     {
         return new Condition_Size($size);
     }
+
+
+    /**
+     * Checks that collection has the given size
+     *
+     * @param $size
+     * @return Condition_Size
+     */
+    public static function sizeGreaterThen($size)
+    {
+    }
+
+
 
 
     /**

@@ -11,22 +11,43 @@ class Condition_Size extends Condition_Rule
         $this->size = $size;
     }
 
-    public function assert($element)
+
+    public function getLocator()
     {
-        //check array
-        $actualSize = count($element);
-        if ($actualSize <> $this->size) {
-            throw new Assertion('Size must be equal ' . $this->size . ', actual - ' . $actualSize);
-        }
+        return $this->getName() . '(' . $this->size . ')';
     }
 
 
-    public function assertNot($element)
+    protected function assertElement($element)
     {
-        //check array
-        $actualSize = count($element);
+        $collection = is_null($element) ? [] : [$element];
+        return $this->assertCollection($collection);
+    }
+
+
+    protected function assertElementNegative($element)
+    {
+        $collection = is_null($element) ? [] : [$element];
+        return $this->assertCollectionNegative($collection);
+    }
+
+
+    protected function assertCollection($elementList)
+    {
+        $actualSize = count($elementList);
+        if ($actualSize <> $this->size) {
+            throw new Assertion('Size must be equal ' . $this->size . ', actual - ' . $actualSize);
+        }
+        return $this;
+    }
+
+
+    protected function assertCollectionNegative($elementList)
+    {
+        $actualSize = count($elementList);
         if ($actualSize == $this->size) {
             throw new Assertion('Size must be NOT equal ' . $this->size . ', actual - ' . $actualSize);
         }
+        return $this;
     }
 }

@@ -4,18 +4,12 @@ namespace Selenide;
 
 class SelenideElement
 {
-    const FILTER_NEGATIVE = 1;
-    const FILTER_POSITIVE = 2;
-
-    const ELEMENT_SINGLE = 1;
-    const ELEMENT_LIST = 2;
-
     /**
-     * @var \WebDriver_Element;
+     * @var Selenide;
      */
-    protected $wdElement = null;
+    protected $selenide = null;
     /**
-     * @var \WebDriver
+     * @var Driver
      */
     protected $driver = null;
     /**
@@ -24,43 +18,84 @@ class SelenideElement
     protected $selectorList = [];
 
 
-    public function __construct($driver, Selector $selector)
+    public function __construct(Selenide $selenide, array $selectorList)
     {
-        $this->driver = $driver;
-        $this->selectorList[] = $selector;
+        $this->selenide = $selenide;
+        $this->driver = $selenide->getDriver();
+        $this->selectorList = $selectorList;
     }
 
 
     /**
+     * Find single element
+     *
+     * @param $locator
+     * @return SelenideElement
+     */
+    public function find($locator)
+    {
+        $selector = new Selector();
+        $selector->locator = $locator;
+        $selector->type = Selector::TYPE_ELEMENT;
+        $selectorList = $this->selectorList;
+        $selectorList[] = $selector;
+        $element = new SelenideElement($this->selenide, $selectorList);
+        return $element;
+    }
+
+
+    /**
+     * Find elements collection
+     *
+     * @param $locator
+     * @return ElementsCollection
+     */
+    public function findAll($locator)
+    {
+        $selector = new Selector();
+        $selector->locator = $locator;
+        $selector->type = Selector::TYPE_COLLECTION;
+        $selectorList = $this->selectorList;
+        $selectorList[] = $selector;
+        $collection = new ElementsCollection($this->selenide, $selectorList);
+        return $collection;
+    }
+
+
+    /**
+     * Filter by condition
+     *
      * @param Condition_Rule $condition
      * @return SelenideElement
      */
     public function should(Condition_Rule $condition)
     {
-        $this->selectorList[] = [
-            'condition' => $condition,
-            'type' => self::FILTER_POSITIVE
-        ];
+        $selector = new Selector();
+        $selector->condition = $condition;
+        $selector->isPositive = true;
+        $this->selectorList[] = $selector;
         return $this;
     }
 
 
     /**
+     * Filter by Not Condition
+     *
      * @param Condition_Rule $condition
      * @return SelenideElement
      */
     public function shouldNot(Condition_Rule $condition)
     {
-        $this->selectorList[] = [
-            'condition' => $condition,
-            'type' => self::FILTER_NEGATIVE
-        ];
+        $selector = new Selector();
+        $selector->condition = $condition;
+        $selector->isPositive = false;
+        $this->selectorList[] = $selector;
         return $this;
     }
 
 
     /**
-     * Alias for shouldHave
+     * Assert condition (alias for shouldHave)
      *
      * @param Condition_Rule $condition
      * @return $this
@@ -71,38 +106,84 @@ class SelenideElement
     }
 
 
+    /**
+     * Assert condition
+     *
+     * @param Condition_Rule $condition
+     * @return $this
+     */
     public function shouldHave(Condition_Rule $condition)
     {
         $element = $this->getElement();
-        $condition->apply($element);
+        $condition->applyAssert($element);
         return $this;
     }
 
 
+    /**
+     * Assert not condition (alias for shouldNotHave)
+     *
+     * @param Condition_Rule $condition
+     * @return SelenideElement
+     */
     public function shouldNotBe(Condition_Rule $condition)
     {
-
+        return $this->shouldNotHave($condition);
     }
 
 
+    /**
+     * Assert not condition
+     *
+     * @param Condition_Rule $condition
+     * @return $this
+     */
     public function shouldNotHave(Condition_Rule $condition)
     {
-
+        $element = $this->getElement();
+        $condition->applyAssertNegative($element);
+        return $this;
     }
 
 
+    /**
+     * Set element value
+     *
+     * @param $value
+     * @return $this
+     */
     public function setValue($value)
     {
-        $this->getElement()->value($value);
+        $element = $this->getElement();
+        $this->selenide->getReport()->addChildEvent('Set value: ' . $value);
+        $element->value($value);
         return $this;
     }
 
 
+    /**
+     * Press key enter
+     *
+     * @return $this
+     */
     public function pressEnter()
     {
-        $driver = $this->driver;
-        $this->getElement()->keys([$driver::KEY_ENTER]);
+        $driver = $this->driver->webDriver();
+        $element = $this->getElement();
+        $this->selenide->getReport()->addChildEvent('press Enter');
+        $element->keys([$driver::KEY_ENTER]);
         return $this;
+    }
+
+
+    /**
+     * Get path for element
+     *
+     * @return string
+     */
+    public function getLocator()
+    {
+        return Util::selectorAsText($this->selectorList);
     }
 
 
@@ -112,13 +193,11 @@ class SelenideElement
      */
     protected function getElement()
     {
-        foreach ($this->selectorList as $index => $selector) {
-            if ($index > 0) {
-                throw new Exception('Unsupported chain selectors');
-            }
-            $method = $selector->isSingle ? 'find' : 'findAll';
-            $element = $this->driver->$method($selector->locator);
-        }
+        $this->selenide->getReport()->addElement($this);
+        $elementList = $this->driver->search($this->selectorList);
+        $element = isset($elementList[0]) ? $elementList[0] : null;
+        $stateText = $element ? 'Found' : 'Not found';
+        $this->selenide->getReport()->addChildEvent($stateText);
         return $element;
     }
 

@@ -34,6 +34,12 @@ class By
     }
 
 
+    public static function tagName($tagName)
+    {
+        return 'tag=' . $tagName;
+    }
+
+
     public static function id($elementId)
     {
         return 'id=' . $elementId;

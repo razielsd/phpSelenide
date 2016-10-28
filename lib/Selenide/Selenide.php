@@ -5,27 +5,29 @@ namespace Selenide;
 class Selenide
 {
     /**
-     * @var \WebDriver
+     * @var Driver
      */
-    protected $webDriver = null;
+    protected $driver = null;
+    /**
+     * @var Configuration
+     */
+    protected $configuration = null;
+    /**
+     * @var Report
+     */
+    protected $report = null;
 
     public function connect()
     {
-        $this->webDriver = \WebDriver::factory();
-
-        $driver = \WebDriver_Driver::factory(
-            '127.0.0.1', 4444, null
-        );
-        $this->webDriver->setDriver($driver);
-
-        $this->webDriver->getDriver()->setDesiredCapability(
-            'browserName', 'firefox'
-        );
-        $this->webDriver->connect();
+        $this->driver = new Driver($this);
+        $this->driver->connect();
+        return $this;
     }
 
 
     /**
+     * Find single element
+     *
      * @param $locator
      * @return SelenideElement
      */
@@ -33,12 +35,14 @@ class Selenide
     {
         $selector = new Selector();
         $selector->locator = $locator;
-        $selector->isSingle = true;
-        return new SelenideElement($this->webDriver, $selector);
+        $selector->type = Selector::TYPE_ELEMENT;
+        return new SelenideElement($this, [$selector]);
     }
 
 
     /**
+     * Find elements collection
+     *
      * @param $locator
      * @return ElementsCollection
      */
@@ -46,13 +50,55 @@ class Selenide
     {
         $selector = new Selector();
         $selector->locator = $locator;
-        $selector->isSingle = false;
-        return new ElementsCollection($this->webDriver, $selector);
+        $selector->type = Selector::TYPE_COLLECTION;
+        return new ElementsCollection($this, [$selector]);
     }
 
 
+    /**
+     * Open url
+     *
+     * @param $url
+     * @return $this
+     */
     public function open($url)
     {
-        $this->webDriver->url($url);
+        $this->getReport()->addCommand('Open ' . $url);
+        $this->driver->webDriver()->url($url);
+        return $this;
     }
+
+
+    /**
+     * @return Configuration
+     */
+    public function configuration()
+    {
+        if (!$this->configuration) {
+            $this->configuration = new Configuration();
+        }
+        return $this->configuration;
+    }
+
+
+    /**
+     * @return Report
+     */
+    public function getReport()
+    {
+        if (!$this->report) {
+            $this->report = new Report();
+        }
+        return $this->report;
+    }
+
+
+    /**
+     * @return Driver
+     */
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+
 }
