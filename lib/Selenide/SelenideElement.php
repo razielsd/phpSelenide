@@ -196,7 +196,7 @@ class SelenideElement
         $this->selenide->getReport()->addElement($this);
         $elementList = $this->driver->search($this->selectorList);
         $element = isset($elementList[0]) ? $elementList[0] : null;
-        $stateText = $element ? 'Found' : 'Not found';
+        $stateText = $element ? 'Found element' : 'Not found element';
         $this->selenide->getReport()->addChildEvent($stateText);
         return $element;
     }

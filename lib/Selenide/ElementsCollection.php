@@ -26,6 +26,9 @@ class ElementsCollection extends SelenideElement
     protected function getCollection()
     {
         $elementList = $this->driver->search($this->selectorList);
+        $stateText = empty($elementList) ?
+            'Not found elements' : ('Found elements' . count($elementList));
+        $this->selenide->getReport()->addChildEvent($stateText);
         return $elementList;
     }
 }
