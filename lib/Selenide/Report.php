@@ -4,6 +4,9 @@ namespace Selenide;
 
 class Report
 {
+
+    protected $isEnabled = true;
+
     public function addCommand($commandLine)
     {
         $this->addRootEvent($commandLine);
@@ -25,12 +28,35 @@ class Report
 
     public function addRootEvent($text)
     {
-        echo 'Selenide: ' . $text . "\n";
+        $this->write('Selenide: ' . $text);
     }
 
 
     public function addChildEvent($text)
     {
-        echo 'Selenide: -->' . $text . "\n";
+        $this->write('Selenide: -->' . $text);
+    }
+
+
+    /**
+     * Enable detailed log
+     */
+    public function enable()
+    {
+        $this->isEnabled = true;
+    }
+
+
+    public function disable()
+    {
+        $this->isEnabled = false;
+    }
+
+
+    protected function write($text)
+    {
+        if ($this->isEnabled) {
+            echo $text . "\n";
+        }
     }
 }

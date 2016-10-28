@@ -55,6 +55,8 @@ class Driver
      * @throws Exception
      */
     public function search($selectorList) {
+        $this->selenide->getReport()
+            ->addRootEvent('Search element: ' . Util::selectorAsText($selectorList));
         $resultList = [];
         $currentSelector = [];
         foreach ($selectorList as $index => $selector) {
@@ -104,11 +106,11 @@ class Driver
         foreach ($elementList as $element) {
             try {
                 $node = $element->child($selector->locator);
+                $resultList[] = $node;
+                break;//found node
             } catch (WebDriver_Exception $e) {
                 //not found, search in next element
             }
-            $resultList[] = $node;
-            break;//found node
         }
         return $resultList;
     }
@@ -121,12 +123,11 @@ class Driver
         foreach ($elementList as $element) {
             try {
                 $nodeList = $element->childAll($selector->locator);
+                foreach ($nodeList as $node) {
+                    $resultList[] = $node;
+                }
             } catch (WebDriver_Exception $e) {
                 //not found, search in next element
-                continue;
-            }
-            foreach ($nodeList as $node) {
-                $resultList[] = $node;
             }
         }
         return $resultList;
