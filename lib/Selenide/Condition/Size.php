@@ -21,9 +21,11 @@ class Condition_Size extends Condition_Rule
     protected function assertCollection($elementList)
     {
         $actualSize = count($elementList);
-        if ($actualSize <> $this->expected) {
-            throw new Assertion('Size must be equal ' . $this->expected . ', actual - ' . $actualSize);
-        }
+        \PHPUnit_Framework_Assert::assertEquals(
+            $this->expected,
+            $actualSize,
+            'Size must be equal ' . $this->expected . ', actual - ' . $actualSize
+        );
         return $this;
     }
 
@@ -31,9 +33,11 @@ class Condition_Size extends Condition_Rule
     protected function assertCollectionNegative($elementList)
     {
         $actualSize = count($elementList);
-        if ($actualSize == $this->expected) {
-            throw new Assertion('Size must be NOT equal ' . $this->expected . ', actual - ' . $actualSize);
-        }
+        \PHPUnit_Framework_Assert::assertNotEquals(
+            $this->expected,
+            $actualSize,
+            'Size must be NOT equal ' . $this->expected . ', actual - ' . $actualSize
+        );
         return $this;
     }
 }

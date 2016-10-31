@@ -1,19 +1,16 @@
 {
-  "name": "phpSelenide",
+  "name": "razielsd/phpSelenide",
   "description": "Selenide for php",
   "license": "MIT",
   "type": "library",
   "keywords": ["selenium","selenide"],
-  "config": {
-    "secure-http": false
-  },
-  "require": {
+  "require-dev": {
     "phpunit/phpunit": "~5",
-    "webdriverlib/webdriverlib": "~1"
+    "razielsd/webdriverlib": "~0.1"
   },
   "autoload": {
     "psr-0": {
-      "selenide": "lib"
+      "Selenide": "lib/Selenide/"
     }
   }
 }

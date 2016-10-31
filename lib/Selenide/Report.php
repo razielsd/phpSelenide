@@ -5,7 +5,7 @@ namespace Selenide;
 class Report
 {
 
-    protected $isEnabled = true;
+    protected $isEnabled = false;
 
     public function addCommand($commandLine)
     {

@@ -1,6 +1,7 @@
 <?php
 
-require_once('WebDriver/WebDriver.php');
+require_once (__DIR__ . '/../vendor/autoload.php');
+
 
 function SelenideClassLoader($className)
 {
