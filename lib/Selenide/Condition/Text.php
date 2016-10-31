@@ -3,28 +3,13 @@ namespace Selenide;
 
 class Condition_Text extends Condition_Rule implements Condition_Interface_matchCollection
 {
-    protected $text = null;
-
-
-    public function __construct($text)
-    {
-        $this->text = $text;
-    }
-
-
-    public function getLocator()
-    {
-        return $this->getName() . '(' . $this->text . ')';
-    }
-
-
     public function matchCollectionPositive($collection)
     {
         $resultList = [];
         /** @var \WebDriver_Element $element */
         foreach ($collection as &$element) {
             $actualText = $element->text();
-            if ($this->text == $actualText) {
+            if ($this->expected == $actualText) {
                 $resultList[] = $element;
             }
         }
@@ -38,7 +23,7 @@ class Condition_Text extends Condition_Rule implements Condition_Interface_match
         /** @var \WebDriver_Element $element */
         foreach ($collection as $element) {
             $actualText = $element->text();
-            if ($this->text != $actualText) {
+            if ($this->expected != $actualText) {
                 $resultList[] = $element;
             }
         }
@@ -62,10 +47,10 @@ class Condition_Text extends Condition_Rule implements Condition_Interface_match
     {
         foreach ($elementListList as $index => $e) {
             $actualText = $e->text();
-            if ($this->text != $actualText) {
+            if ($this->expected != $actualText) {
                 $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
                 throw new Assertion(
-                    $prefix . 'Text must be equal ' . $this->text . ', actual - ' . $actualText
+                    $prefix . 'Text must be equal ' . $this->expected . ', actual - ' . $actualText
                 );
             }
         }
@@ -77,10 +62,10 @@ class Condition_Text extends Condition_Rule implements Condition_Interface_match
     {
         foreach ($elementList as $index => $e) {
             $actualText = $e->text();
-            if ($this->text == $actualText) {
+            if ($this->expected == $actualText) {
                 $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
                 throw new Assertion(
-                    $prefix . 'Text must be NOT equal ' . $this->text . ', actual - ' . $actualText
+                    $prefix . 'Text must be NOT equal ' . $this->expected . ', actual - ' . $actualText
                 );
             }
         }

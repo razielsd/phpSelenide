@@ -177,6 +177,106 @@ class SelenideElement
 
 
     /**
+     * Click on element
+     *
+     * @return $this
+     */
+    public function click()
+    {
+        $element = $this->getElement();
+        $this->selenide->getReport()->addChildEvent('Click');
+        $element->click();
+        return $this;
+    }
+
+
+    /**
+     * Click on element
+     *
+     * @return $this
+     */
+    public function doubleClick()
+    {
+        $element = $this->getElement();
+        $this->selenide->getReport()->addChildEvent('Double click');
+        $element->dbclick();
+        return $this;
+    }
+
+
+    /**
+     * Select option by option text
+     *
+     * @param $text
+     * @return $this
+     */
+    public function selectOption($text)
+    {
+        throw new Exception(__METHOD__ . ' - under construction');
+        //$element = $this->getElement();
+        //$this->selenide->getReport()->addChildEvent('selectOption');
+        //$element->value();
+        return $this;
+    }
+
+
+    /**
+     * Select option by value
+     *
+     * @param $value
+     * @return $this
+     */
+    public function selectOptionByValue($value)
+    {
+        $element = $this->getElement();
+        $this->selenide->getReport()->addChildEvent('Set element value: ' . $value);
+        $element->value($value);
+        return $this;
+    }
+
+
+    /**
+     * Get element value
+     *
+     * @return string
+     */
+    public function val()
+    {
+        $element = $this->getElement();
+        $this->selenide->getReport()->addChildEvent('Read value');
+        return $element->value();
+    }
+
+
+    /**
+     * Get element attribute
+     *
+     * @param $name
+     * @return $this
+     */
+    public function attribute($name)
+    {
+        $element = $this->getElement();
+        $this->selenide->getReport()->addChildEvent('Get attribute: ' . $name);
+        $element->attribute($name);
+        return $this;
+    }
+
+
+    /**
+     * Get element text
+     *
+     * @return string
+     */
+    public function text()
+    {
+        $element = $this->getElement();
+        $this->selenide->getReport()->addChildEvent('Get element text');
+        return $element->text();
+    }
+
+
+    /**
      * Get path for element
      *
      * @return string

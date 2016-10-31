@@ -3,20 +3,6 @@ namespace Selenide;
 
 class Condition_WithText extends Condition_Rule implements Condition_Interface_matchCollection
 {
-    protected $text = null;
-
-
-    public function __construct($text)
-    {
-        $this->text = $text;
-    }
-
-
-    public function getLocator()
-    {
-        return $this->getName() . '(' . $this->text . ')';
-    }
-
 
     public function matchCollectionPositive($collection)
     {
@@ -24,7 +10,7 @@ class Condition_WithText extends Condition_Rule implements Condition_Interface_m
         /** @var \WebDriver_Element $element */
         foreach ($collection as &$element) {
             $actualText = $element->text();
-            if (mb_strpos($actualText, $this->text) !== false) {
+            if (mb_strpos($actualText, $this->expected) !== false) {
                 $resultList[] = $element;
             }
         }
@@ -38,7 +24,7 @@ class Condition_WithText extends Condition_Rule implements Condition_Interface_m
         /** @var \WebDriver_Element $element */
         foreach ($collection as $element) {
             $actualText = $element->text();
-            if (mb_strpos($actualText, $this->text) === false) {
+            if (mb_strpos($actualText, $this->expected) === false) {
                 $resultList[] = $element;
             }
         }
@@ -62,10 +48,10 @@ class Condition_WithText extends Condition_Rule implements Condition_Interface_m
     {
         foreach ($elementListList as $index => $e) {
             $actualText = $e->text();
-            if (mb_strpos($actualText, $this->text) === false) {
+            if (mb_strpos($actualText, $this->expected) === false) {
                 $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
                 throw new Assertion(
-                    $prefix . 'Text must be contain ' . $this->text . ', actual - ' . $actualText
+                    $prefix . 'Text must be contain ' . $this->expected . ', actual - ' . $actualText
                 );
             }
         }
@@ -77,10 +63,10 @@ class Condition_WithText extends Condition_Rule implements Condition_Interface_m
     {
         foreach ($elementList as $index => $e) {
             $actualText = $e->text();
-            if (mb_strpos($actualText, $this->text) !== false) {
+            if (mb_strpos($actualText, $this->expected) !== false) {
                 $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
                 throw new Assertion(
-                    $prefix . 'Text must be NOT contain ' . $this->text . ', actual - ' . $actualText
+                    $prefix . 'Text must be NOT contain ' . $this->expected . ', actual - ' . $actualText
                 );
             }
         }

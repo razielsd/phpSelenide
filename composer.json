@@ -1,0 +1,19 @@
+{
+  "name": "phpSelenide",
+  "description": "Selenide for php",
+  "license": "MIT",
+  "type": "library",
+  "keywords": ["selenium","selenide"],
+  "config": {
+    "secure-http": false
+  },
+  "require": {
+    "phpunit/phpunit": "~5",
+    "webdriverlib/webdriverlib": "~1"
+  },
+  "autoload": {
+    "psr-0": {
+      "selenide": "lib"
+    }
+  }
+}

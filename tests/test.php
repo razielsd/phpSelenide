@@ -40,3 +40,6 @@ $wd->findAll(By::id('childList'))
     ->findAll(By::tagName('li'))
     ->should(Condition::withText('ChildDouble'))
     ->shouldHave(Condition::size(2));
+
+
+// Displayed

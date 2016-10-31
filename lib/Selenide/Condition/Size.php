@@ -3,20 +3,6 @@ namespace Selenide;
 
 class Condition_Size extends Condition_Rule
 {
-    protected $size = null;
-
-
-    public function __construct($size)
-    {
-        $this->size = $size;
-    }
-
-
-    public function getLocator()
-    {
-        return $this->getName() . '(' . $this->size . ')';
-    }
-
 
     protected function assertElement($element)
     {
@@ -35,8 +21,8 @@ class Condition_Size extends Condition_Rule
     protected function assertCollection($elementList)
     {
         $actualSize = count($elementList);
-        if ($actualSize <> $this->size) {
-            throw new Assertion('Size must be equal ' . $this->size . ', actual - ' . $actualSize);
+        if ($actualSize <> $this->expected) {
+            throw new Assertion('Size must be equal ' . $this->expected . ', actual - ' . $actualSize);
         }
         return $this;
     }
@@ -45,8 +31,8 @@ class Condition_Size extends Condition_Rule
     protected function assertCollectionNegative($elementList)
     {
         $actualSize = count($elementList);
-        if ($actualSize == $this->size) {
-            throw new Assertion('Size must be NOT equal ' . $this->size . ', actual - ' . $actualSize);
+        if ($actualSize == $this->expected) {
+            throw new Assertion('Size must be NOT equal ' . $this->expected . ', actual - ' . $actualSize);
         }
         return $this;
     }

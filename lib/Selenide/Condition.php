@@ -23,8 +23,20 @@ class Condition
      */
     public static function sizeGreaterThen($size)
     {
+        return new Condition_SizeGreaterThen($size);
     }
 
+
+    /**
+     * Check element(s) attribute value
+     *
+     * @param $value
+     * @return Condition_Value
+     */
+    public static function value($value)
+    {
+        return new Condition_Value($value);
+    }
 
 
 

@@ -4,6 +4,14 @@ namespace Selenide;
 
 abstract class Condition_Rule
 {
+    protected $expected = null;
+
+
+    public function __construct($expected)
+    {
+        $this->expected = $expected;
+    }
+
     /**
      * Get Condition name
      *
@@ -12,6 +20,7 @@ abstract class Condition_Rule
     public function getName()
     {
         $className = get_called_class();
+        $className = preg_replace("#^[^\\\\]+\\\\#i", '', $className);
         return str_replace('_', '::', $className);
     }
 
@@ -20,7 +29,10 @@ abstract class Condition_Rule
      *
      * @return string
      */
-    abstract public function getLocator();
+    public function getLocator()
+    {
+        return $this->getName() . '(' . $this->expected . ')';
+    }
 
 
     public function applyAssert($element)
