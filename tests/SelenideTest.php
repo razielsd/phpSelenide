@@ -84,6 +84,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         self::$wd->findAll(By::id('childList'))
             ->findAll(By::tagName('li'))
+            ->setName('childlist')
             ->should(Condition::withText('ChildDouble'))
             ->shouldHave(Condition::size(2));
     }

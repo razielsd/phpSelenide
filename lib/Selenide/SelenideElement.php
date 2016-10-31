@@ -16,6 +16,11 @@ class SelenideElement
      * @var Selector[]
      */
     protected $selectorList = [];
+    /**
+     * Element name
+     * @var string
+     */
+    protected $name = null;
 
 
     public function __construct(Selenide $selenide, array $selectorList)
@@ -284,6 +289,19 @@ class SelenideElement
     public function getLocator()
     {
         return Util::selectorAsText($this->selectorList);
+    }
+
+
+    /**
+     * Set element name
+     *
+     * @param $name
+     * @return $this
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+        return $this;
     }
 
 
