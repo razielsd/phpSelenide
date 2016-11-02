@@ -47,12 +47,12 @@ class Condition_Text extends Condition_Rule implements Condition_Interface_match
     {
         foreach ($elementListList as $index => $e) {
             $actualText = $e->text();
-            if ($this->expected != $actualText) {
-                $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
-                throw new Assertion(
-                    $prefix . 'Text must be equal ' . $this->expected . ', actual - ' . $actualText
-                );
-            }
+            $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
+            \PHPUnit_Framework_Assert::assertEquals(
+                $this->expected,
+                $actualText,
+                $prefix . 'Not found text: ' . $this->expected . '. Actual: ' . $actualText
+            );
         }
         return $this;
     }
@@ -62,10 +62,16 @@ class Condition_Text extends Condition_Rule implements Condition_Interface_match
     {
         foreach ($elementList as $index => $e) {
             $actualText = $e->text();
+            $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
+            \PHPUnit_Framework_Assert::assertNotEquals(
+                $this->expected,
+                $actualText,
+                $prefix . 'Found text: ' . $this->expected . '. Actual: ' . $actualText
+            );
             if ($this->expected == $actualText) {
-                $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
+
                 throw new Assertion(
-                    $prefix . 'Text must be NOT equal ' . $this->expected . ', actual - ' . $actualText
+
                 );
             }
         }

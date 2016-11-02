@@ -52,7 +52,7 @@ class Condition_WithText extends Condition_Rule implements Condition_Interface_m
             \PHPUnit_Framework_Assert::assertContains(
                 $this->expected,
                 $actualText,
-                $prefix . 'Text must be contain ' . $this->expected . ', actual - ' . $actualText
+                $prefix . 'Text not contain ' . $this->expected . ', actual - ' . $actualText
             );
         }
         return $this;
@@ -67,7 +67,7 @@ class Condition_WithText extends Condition_Rule implements Condition_Interface_m
             \PHPUnit_Framework_Assert::assertNotContains(
                 $this->expected,
                 $actualText,
-                $prefix . 'Text must be NOT contain ' . $this->expected . ', actual - ' . $actualText
+                $prefix . 'Text contain ' . $this->expected . ', actual - ' . $actualText
             );
         }
         return $this;

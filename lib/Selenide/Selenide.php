@@ -16,6 +16,11 @@ class Selenide
      * @var Report
      */
     protected $report = null;
+    /**
+     * Server host for test
+     * @var string
+     */
+    protected $host = '';
 
     public function connect()
     {
@@ -63,8 +68,9 @@ class Selenide
      */
     public function open($url)
     {
-        $this->getReport()->addCommand('Open ' . $url);
-        $this->driver->webDriver()->url($url);
+        $openUrl = $this->configuration()->baseUrl . $url;
+        $this->getReport()->addCommand('Open ' . $openUrl);
+        $this->driver->webDriver()->url($openUrl);
         return $this;
     }
 

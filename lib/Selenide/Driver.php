@@ -59,41 +59,73 @@ class Driver
             ->addRootEvent('Search element: ' . Util::selectorAsText($selectorList));
         $resultList = [];
         $currentSelector = [];
+        $timeout = $this->selenide->configuration()->timeout;
+        $startTime = microtime(true);
+        $searchTimeout = 1;
         foreach ($selectorList as $index => $selector) {
             $this->selenide->getReport()->addChildEvent('Match: ' . $selector->asString());
-            $this->debugLog(__METHOD__ . ': Iteration ' . $index);
-            $this->debugLog('Selector::type = ' . $selector->type);
             $currentSelector[] = $selector;
-            if ($index == 0) {
-                switch ($selector->type) {
-                    case Selector::TYPE_ELEMENT:
-                        $resultList = [$this->webDriver()->find($selector->locator)];
-                        break;
-                    case Selector::TYPE_COLLECTION:
-                        $resultList = $this->webDriver()->findAll($selector->locator);
-                        break;
-                    default:
-                        throw new Exception('Logic error: unable search start from condition');
-                }
-            } else {
-                switch ($selector->type) {
-                    case Selector::TYPE_ELEMENT:
-                        $resultList = $this->searchChild($resultList, $selector);
-                        break;
-                    case Selector::TYPE_COLLECTION:
-                        $resultList = $this->searchAllChild($resultList, $selector);
-                        break;
-                    case Selector::TYPE_CONDITION:
-                        $resultList = $this->searchByCondition($resultList, $selector);
-                        break;
-                    default:
-                        throw new Exception(
-                            'Unknown value for Selector::type = ' . $selector->type
-                        );
+            $foundElement = false;
+            while (!$foundElement) {
+                try {
+                    if ($index == 0) {
+                        $resultList = $this->searchFirstElement($selector);
+                    } else {
+                        $resultList = $this->searchFromSecondElement($resultList, $selector);
+                    }
+                    foreach ($resultList as &$element) {
+                        //refresh elements
+                        $element->getElementId();
+                    }
+                    $foundElement = true;
+                } catch (\WebDriver_Exception $e) {
+                    $currentTime = microtime(true);
+                    if (($currentTime - $startTime) <= $timeout) {
+                        sleep($searchTimeout);
+                    } else {
+                        return [];
+                    }
                 }
             }
             $this->selenide->getReport()->addChildEvent('Found: ' . count($resultList));
-            $this->debugLog('Found: ' . count($resultList));
+        }
+        return $resultList;
+    }
+
+
+    protected function searchFirstElement($selector)
+    {
+        switch ($selector->type) {
+            case Selector::TYPE_ELEMENT:
+                $element = $this->webDriver()->find($selector->locator);
+                $resultList = [$element];
+                break;
+            case Selector::TYPE_COLLECTION:
+                $resultList = $this->webDriver()->findAll($selector->locator);
+                break;
+            default:
+                throw new Exception('Logic error: unable search start from condition');
+        }
+        return $resultList;
+    }
+
+
+    protected function searchFromSecondElement($resultList, $selector)
+    {
+        switch ($selector->type) {
+            case Selector::TYPE_ELEMENT:
+                $resultList = $this->searchChild($resultList, $selector);
+                break;
+            case Selector::TYPE_COLLECTION:
+                $resultList = $this->searchAllChild($resultList, $selector);
+                break;
+            case Selector::TYPE_CONDITION:
+                $resultList = $this->searchByCondition($resultList, $selector);
+                break;
+            default:
+                throw new Exception(
+                    'Unknown value for Selector::type = ' . $selector->type
+                );
         }
         return $resultList;
     }
