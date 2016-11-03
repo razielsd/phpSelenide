@@ -16,7 +16,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
      * Url for test page in tests/www/webdrivertest.html
      * @var string
      */
-    protected static $testUrl = 'http://devtest.dev/selenidehtml/';//'http://devtest.ru/tmp/webdrivertest.html';
+    protected static $testUrl = '/selenidehtml/';
+    protected static $baseUrl = 'http://devtest.dev';
 
     protected $backupStaticAttributesBlacklist = array(
         'SelenideTest' => array('wd')
@@ -27,7 +28,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         parent::setUpBeforeClass();
         self::$wd = new \Selenide\Selenide();
-
+        self::$wd->configuration()->baseUrl = self::$baseUrl;
         self::$wd->connect();
         self::$wd->open(self::$testUrl);
     }
@@ -49,6 +50,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     public function testText()
     {
         self::$wd->find(By::text('textOne'))
+            ->should(Condition::text("textOne"))
+            ->shouldNot(Condition::text("textTwo"))
             ->shouldHave(Condition::text("textOne"))
             ->shouldNotHave(Condition::text("textTwo"));
     }
@@ -57,35 +60,25 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     public function testWithText()
     {
         self::$wd->find(By::withText('textTwo'))
+            ->should(Condition::withText("textTwo"))
+            ->shouldNot(Condition::withText("textOne"))
             ->shouldHave(Condition::withText("textTwo"))
             ->shouldNotHave(Condition::withText("textOne"));
     }
 
 
-    public function testTextSize()
+    public function testVisible()
     {
-        self::$wd->find(By::id('childList'))
-            ->findAll(By::tagName('li'))
-            ->should(Condition::text('ChildTwo'))
-            ->shouldHave(Condition::size(1));
+        self::$wd->find(By::withText('textTwo'))
+            ->should(Condition::visible())
+            ->shouldHave(Condition::visible());
     }
 
 
-    public function testCollectionTextSize()
+    public function testInvisible()
     {
-        self::$wd->findAll(By::id('childList'))
-            ->findAll(By::tagName('li'))
-            ->should(Condition::text('ChildDouble'))
-            ->shouldHave(Condition::size(2));
-    }
-
-
-    public function testCollectionWithTextSize()
-    {
-        self::$wd->findAll(By::id('childList'))
-            ->findAll(By::tagName('li'))
-            ->setName('childlist')
-            ->should(Condition::withText('ChildDouble'))
-            ->shouldHave(Condition::size(2));
+        self::$wd->find(By::id('hidden-div'))
+            ->shouldNot(Condition::visible())
+            ->shouldNotHave(Condition::visible());
     }
 }

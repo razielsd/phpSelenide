@@ -23,11 +23,27 @@ class SelenideElement
     protected $name = null;
 
 
+    protected $description = '';
+
+
     public function __construct(Selenide $selenide, array $selectorList)
     {
         $this->selenide = $selenide;
         $this->driver = $selenide->getDriver();
         $this->selectorList = $selectorList;
+    }
+
+
+    /**
+     * Set element description
+     *
+     * @param $description
+     * @return $this
+     */
+    public function description($description)
+    {
+        $this->description = $description;
+        return $this;
     }
 
 
@@ -120,7 +136,16 @@ class SelenideElement
     public function shouldHave(Condition_Rule $condition)
     {
         $element = $this->getElement();
-        $condition->applyAssert($element);
+        try {
+            $condition->applyAssert($element);
+        } catch (Exception_ElementNotFound $e) {
+            throw new Exception_ElementNotFound(
+                'Not found element ' . $this->name. ' ' . $this->getLocator() . ' with condition ' .
+                    $condition->getLocator(),
+                0,
+                $e);
+        }
+
         return $this;
     }
 

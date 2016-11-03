@@ -18,7 +18,7 @@ class Condition_Size extends Condition_Rule
     }
 
 
-    protected function assertCollection($elementList)
+    protected function assertCollection(array $elementList)
     {
         $actualSize = count($elementList);
         \PHPUnit_Framework_Assert::assertEquals(
@@ -30,7 +30,7 @@ class Condition_Size extends Condition_Rule
     }
 
 
-    protected function assertCollectionNegative($elementList)
+    protected function assertCollectionNegative(array $elementList)
     {
         $actualSize = count($elementList);
         \PHPUnit_Framework_Assert::assertNotEquals(

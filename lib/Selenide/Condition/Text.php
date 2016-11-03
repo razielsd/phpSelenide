@@ -1,33 +1,12 @@
 <?php
 namespace Selenide;
 
-class Condition_Text extends Condition_Rule implements Condition_Interface_matchCollection
+class Condition_Text extends Condition_Rule implements Condition_Interface_Match
 {
-    public function matchCollectionPositive($collection)
+    public function matchElement(\WebDriver_Element $element)
     {
-        $resultList = [];
-        /** @var \WebDriver_Element $element */
-        foreach ($collection as &$element) {
-            $actualText = $element->text();
-            if ($this->expected == $actualText) {
-                $resultList[] = $element;
-            }
-        }
-        return $resultList;
-    }
-
-
-    public function matchCollectionNegative($collection)
-    {
-        $resultList = [];
-        /** @var \WebDriver_Element $element */
-        foreach ($collection as $element) {
-            $actualText = $element->text();
-            if ($this->expected != $actualText) {
-                $resultList[] = $element;
-            }
-        }
-        return $resultList;
+        $actualText = $element->text();
+        return $this->expected == $actualText;
     }
 
 
@@ -43,7 +22,7 @@ class Condition_Text extends Condition_Rule implements Condition_Interface_match
     }
 
 
-    protected function assertCollection($elementListList, $showIndex = true)
+    protected function assertCollection(array $elementListList, $showIndex = true)
     {
         foreach ($elementListList as $index => $e) {
             $actualText = $e->text();
@@ -58,7 +37,7 @@ class Condition_Text extends Condition_Rule implements Condition_Interface_match
     }
 
 
-    protected function assertCollectionNegative($elementList, $showIndex = true)
+    protected function assertCollectionNegative(array $elementList, $showIndex = true)
     {
         foreach ($elementList as $index => $e) {
             $actualText = $e->text();

@@ -39,8 +39,10 @@ abstract class Condition_Rule
     {
         if (is_object($element)) {
             $this->assertElement($element);
-        } else {
+        } else if (is_array($element)) {
             $this->assertCollection($element);
+        } else {
+            throw new Exception_ElementNotFound('Not found element');
         }
         return $this;
     }
@@ -50,19 +52,32 @@ abstract class Condition_Rule
     {
         if (is_object($element)) {
             $this->assertElementNegative($element);
-        } else {
+        } else if(is_array($element)) {
             $this->assertCollectionNegative($element);
+        } else {
+        throw new Exception_ElementNotFound('Not found element');
         }
         return $this;
     }
 
 
     public function match($collection, $isPositive = true){
-        if ($this instanceof Condition_Interface_matchCollection) {
-            if ($isPositive) {
-                $result = $this->matchCollectionPositive($collection);
-            } else {
-                $result = $this->matchCollectionNegative($collection);
+        $result = [];
+        if (empty($collection)) {
+            return $result;
+        }
+        if ($this instanceof Condition_Interface_MatchCollection) {
+            $result = $isPositive ?
+                $this->matchCollectionPositive($collection) : $this->matchCollectionNegative($collection);
+        }  else if ($this instanceof Condition_Interface_Match) {
+            $result = [];
+            foreach ($collection as $element) {
+                $isMatched = $this->matchElement($element);
+                if ($isMatched && $isPositive) { //match positive
+                    $result[] = $element;
+                } else if (!$isMatched && !$isPositive) { // match negative
+                    $result[] = $element;
+                }
             }
         } else {
             throw new Exception('Condition ' . $this->getName() . " can't use in should()");
@@ -87,7 +102,7 @@ abstract class Condition_Rule
     }
 
 
-    protected function assertCollection($elementList)
+    protected function assertCollection(array $elementList)
     {
         throw new Exception(
             'Unsupported condition ' . get_called_class() . ' for ElementsCollection'
@@ -95,7 +110,7 @@ abstract class Condition_Rule
     }
 
 
-    protected function assertCollectionNegative($element)
+    protected function assertCollectionNegative(array $element)
     {
         throw new Exception(
             'Unsupported condition ' . get_called_class() . ' for ElementsCollection'

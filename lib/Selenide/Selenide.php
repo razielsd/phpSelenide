@@ -70,7 +70,11 @@ class Selenide
     {
         $openUrl = $this->configuration()->baseUrl . $url;
         $this->getReport()->addCommand('Open ' . $openUrl);
-        $this->driver->webDriver()->url($openUrl);
+        try {
+            $this->driver->webDriver()->url($openUrl);
+        } catch (\WebDriver_Exception_FailedCommand $e){
+            throw new Exception('Error open url: ' . $openUrl, 0, $e);
+        }
         return $this;
     }
 
@@ -105,6 +109,20 @@ class Selenide
     public function getDriver()
     {
         return $this->driver;
+    }
+
+
+    /**
+     * Create element with description
+     *
+     * @param $description
+     * @return SelenideElement
+     */
+    public function description($description)
+    {
+        $element = new SelenideElement($this, []);
+        $element->description($description);
+        return $element;
     }
 
 }

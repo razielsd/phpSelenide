@@ -62,4 +62,16 @@ class Condition
         return new Condition_WithText($text);
     }
 
+
+    /**
+     * Check dispayed
+     *
+     * @return Condition_Visible
+     */
+    public static function visible()
+    {
+        return new Condition_Visible(null);
+    }
+
+
 }
