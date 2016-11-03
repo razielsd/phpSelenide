@@ -2,5 +2,6 @@
 namespace Selenide;
 
 interface Condition_Interface_assertCollection {
-    public function assertCollection(array $collection);
+    public function assertCollectionPositive(array $collection);
+    public function assertCollectionNegative(array $collection);
 }

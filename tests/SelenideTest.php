@@ -47,9 +47,26 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testSizeGreaterThen()
+    {
+        self::$wd->findAll(By::css('#ires li.gtest'))
+            ->shouldHave(Condition::sizeGreaterThen(9))
+            ->shouldNotHave(Condition::sizeGreaterThen(10));
+    }
+
+
     public function testText()
     {
         self::$wd->find(By::text('textOne'))
+            ->should(Condition::text("textOne"))
+            ->shouldNot(Condition::text("textTwo"))
+            ->shouldHave(Condition::text("textOne"))
+            ->shouldNotHave(Condition::text("textTwo"));
+    }
+
+    public function testTextCollection()
+    {
+        self::$wd->findAll(By::text('textOne'))
             ->should(Condition::text("textOne"))
             ->shouldNot(Condition::text("textTwo"))
             ->shouldHave(Condition::text("textOne"))
@@ -66,10 +83,27 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->shouldNotHave(Condition::withText("textOne"));
     }
 
+    public function testWithTextCollection()
+    {
+        self::$wd->findAll(By::withText('textTwo'))
+            ->should(Condition::withText("textTwo"))
+            ->shouldNot(Condition::withText("textOne"))
+            ->shouldHave(Condition::withText("textTwo"))
+            ->shouldNotHave(Condition::withText("textOne"));
+    }
+
 
     public function testVisible()
     {
         self::$wd->find(By::withText('textTwo'))
+            ->should(Condition::visible())
+            ->shouldHave(Condition::visible());
+    }
+
+
+    public function testVisibleCollection()
+    {
+        self::$wd->findAll(By::withText('textTwo'))
             ->should(Condition::visible())
             ->shouldHave(Condition::visible());
     }
@@ -81,4 +115,22 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->shouldNot(Condition::visible())
             ->shouldNotHave(Condition::visible());
     }
+
+
+    public function testInvisibleCollection()
+    {
+        self::$wd->findAll(By::id('hidden-div'))
+            ->shouldNot(Condition::visible())
+            ->shouldNotHave(Condition::visible());
+    }
+
+    public function testConditionValue()
+    {
+        self::$wd->find(By::tagName('input'))
+            ->should(Condition::value('textValue'))
+            ->shouldNot(Condition::value('textzzZ'))
+            ->shouldHave(Condition::value('textValue'))
+            ->shouldNotHave(Condition::value('textzzZ'));
+    }
+
 }

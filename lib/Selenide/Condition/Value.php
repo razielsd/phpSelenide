@@ -2,48 +2,39 @@
 namespace Selenide;
 
 class Condition_Value extends Condition_Rule
+    implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
-    protected function assert($element)
+
+    public function matchElement(\WebDriver_Element $element)
     {
-        $actual = $this->getActualValue($element);
-        if ($actual <> $this->expected) {
-            throw new Assertion('Value must be equal ' . $this->expected . ', actual - ' . $actual);
-        }
+        return $this->getActualValue($element) == $this->expected;
     }
 
 
-    protected function assertNegative($element)
-    {
-        $actual = $this->getActualValue($element);
-        if ($actual == $this->expected) {
-            throw new Assertion('Value must be NOT equal ' . $this->expected . ', actual - ' . $actual);
-        }
-    }
 
-
-    protected function assertCollection($elementList)
+    public function assertCollectionPositive(array $elementList)
     {
         foreach ($elementList as $index => $e) {
             $actual = $this->getActualValue($e);
-            if ($this->expected != $actual) {
-                throw new Assertion(
-                    'Value must be equal ' . $this->expected . ', actual - ' . $actual
-                );
-            }
+            \PHPUnit_Framework_Assert::assertEquals(
+                $this->expected,
+                $actual,
+                'Value must be equal ' . $this->expected . ', actual - ' . $actual
+            );
         }
         return $this;
     }
 
 
-    protected function assertCollectionNegative($elementList)
+    public function assertCollectionNegative(array $elementList)
     {
         foreach ($elementList as $index => $e) {
             $actual = $this->getActualValue($e);
-            if ($this->expected != $actual) {
-                throw new Assertion(
-                    'Value must be NOT equal ' . $this->expected . ', actual - ' . $actual
-                );
-            }
+            \PHPUnit_Framework_Assert::assertNotEquals(
+                $this->expected,
+                $actual,
+                'Value must be equal ' . $this->expected . ', actual - ' . $actual
+            );
         }
         return $this;
     }
@@ -51,6 +42,6 @@ class Condition_Value extends Condition_Rule
 
     public function getActualValue(\WebDriver_Element $element)
     {
-        return $element->attribute('value');
+        return $element->value();
     }
 }

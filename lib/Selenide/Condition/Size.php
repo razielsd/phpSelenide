@@ -2,23 +2,9 @@
 namespace Selenide;
 
 class Condition_Size extends Condition_Rule
+    implements Condition_Interface_assertCollection
 {
-
-    protected function assertElement($element)
-    {
-        $collection = is_null($element) ? [] : [$element];
-        return $this->assertCollection($collection);
-    }
-
-
-    protected function assertElementNegative($element)
-    {
-        $collection = is_null($element) ? [] : [$element];
-        return $this->assertCollectionNegative($collection);
-    }
-
-
-    protected function assertCollection(array $elementList)
+    public function assertCollectionPositive(array $elementList)
     {
         $actualSize = count($elementList);
         \PHPUnit_Framework_Assert::assertEquals(
@@ -30,7 +16,7 @@ class Condition_Size extends Condition_Rule
     }
 
 
-    protected function assertCollectionNegative(array $elementList)
+    public function assertCollectionNegative(array $elementList)
     {
         $actualSize = count($elementList);
         \PHPUnit_Framework_Assert::assertNotEquals(

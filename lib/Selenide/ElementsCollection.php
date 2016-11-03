@@ -20,6 +20,22 @@ class ElementsCollection extends SelenideElement
 
 
     /**
+     * Check element visible
+     *
+     * @return bool
+     */
+    public function isDispayed()
+    {
+        $collection = $this->getCollection();
+        $counter = 0;
+        foreach ($collection as $element) {
+            $counter += $element->isDisplayed() ? 1 : 0;
+        }
+        return count($collection) == $counter;
+    }
+
+
+    /**
      * @return \WebDriver_Element
      * @throws Exception
      */

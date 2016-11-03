@@ -35,27 +35,25 @@ abstract class Condition_Rule
     }
 
 
-    public function applyAssert($element)
+    public function applyAssert(array $collection)
     {
-        if (is_object($element)) {
-            $this->assertElement($element);
-        } else if (is_array($element)) {
-            $this->assertCollection($element);
-        } else {
-            throw new Exception_ElementNotFound('Not found element');
+        if ($this instanceof Condition_Interface_assertCollection) {
+            $this->assertCollectionPositive($collection);
+        }else {
+            throw new Exception_UnsupportedConditionOperation(
+                'Condition ' . $this->getName() . ' not support for assertion(shouldHave and etc)');
         }
         return $this;
     }
 
 
-    public function applyAssertNegative($element)
+    public function applyAssertNegative(array $collection)
     {
-        if (is_object($element)) {
-            $this->assertElementNegative($element);
-        } else if(is_array($element)) {
-            $this->assertCollectionNegative($element);
-        } else {
-        throw new Exception_ElementNotFound('Not found element');
+        if ($this instanceof Condition_Interface_assertCollection) {
+            $this->assertCollectionNegative($collection);
+        }else {
+            throw new Exception_UnsupportedConditionOperation(
+                'Condition ' . $this->getName() . ' not support for assertion(shouldHave and etc)');
         }
         return $this;
     }
@@ -84,38 +82,4 @@ abstract class Condition_Rule
         }
         return $result;
     }
-
-
-    protected function assertElement($element)
-    {
-        throw new Exception(
-            'Unsupported condition ' . get_called_class() . ' for single element'
-        );
-    }
-
-
-    protected function assertElementNegative($element)
-    {
-        throw new Exception(
-            'Unsupported condition ' . get_called_class() . ' for single element'
-        );
-    }
-
-
-    protected function assertCollection(array $elementList)
-    {
-        throw new Exception(
-            'Unsupported condition ' . get_called_class() . ' for ElementsCollection'
-        );
-    }
-
-
-    protected function assertCollectionNegative(array $element)
-    {
-        throw new Exception(
-            'Unsupported condition ' . get_called_class() . ' for ElementsCollection'
-        );
-    }
-
-
 }

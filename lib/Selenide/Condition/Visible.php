@@ -1,7 +1,8 @@
 <?php
 namespace Selenide;
 
-class Condition_Visible extends Condition_Rule implements Condition_Interface_Match
+class Condition_Visible extends Condition_Rule
+    implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
     public function matchElement(\WebDriver_Element $element)
     {
@@ -9,36 +10,11 @@ class Condition_Visible extends Condition_Rule implements Condition_Interface_Ma
     }
 
 
-    public function matchCollectionNegative($collection)
-    {
-        $resultList = [];
-        /** @var \WebDriver_Element $element */
-        foreach ($collection as $element) {
-            if (!$element->isDisplayed()) {
-                $resultList[] = $element;
-            }
-        }
-        return $resultList;
-    }
-
-
-    protected function assertElement($element)
-    {
-        return $this->assertCollection([$element], false);
-    }
-
-
-    protected function assertElementNegative($element)
-    {
-        return $this->assertCollectionNegative([$element], false);
-    }
-
-
-    protected function assertCollection(array $elementList, $showIndex = true)
+    public function assertCollectionPositive(array $elementList)
     {
         /** @var \WebDriver_Element $element */
         foreach ($elementList as $index => $element) {
-            $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
+            $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
             \PHPUnit_Framework_Assert::assertTrue(
                 $element->isDisplayed(),
                 $prefix . 'Element is not visible'
@@ -48,11 +24,11 @@ class Condition_Visible extends Condition_Rule implements Condition_Interface_Ma
     }
 
 
-    protected function assertCollectionNegative(array $elementList, $showIndex = true)
+    public function assertCollectionNegative(array $elementList)
     {
         /** @var \WebDriver_Element $element */
         foreach ($elementList as $index => $element) {
-            $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
+            $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
             \PHPUnit_Framework_Assert::assertFalse(
                 $element->isDisplayed(),
                 $prefix . 'Element is visible'

@@ -1,7 +1,8 @@
 <?php
 namespace Selenide;
 
-class Condition_Text extends Condition_Rule implements Condition_Interface_Match
+class Condition_Text extends Condition_Rule
+    implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
     public function matchElement(\WebDriver_Element $element)
     {
@@ -10,23 +11,11 @@ class Condition_Text extends Condition_Rule implements Condition_Interface_Match
     }
 
 
-    protected function assertElement($element)
+    public function assertCollectionPositive(array $elementList)
     {
-        return $this->assertCollection([$element], false);
-    }
-
-
-    protected function assertElementNegative($element)
-    {
-        return $this->assertCollectionNegative([$element], false);
-    }
-
-
-    protected function assertCollection(array $elementListList, $showIndex = true)
-    {
-        foreach ($elementListList as $index => $e) {
+        foreach ($elementList as $index => $e) {
             $actualText = $e->text();
-            $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
+            $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
             \PHPUnit_Framework_Assert::assertEquals(
                 $this->expected,
                 $actualText,
@@ -37,11 +26,11 @@ class Condition_Text extends Condition_Rule implements Condition_Interface_Match
     }
 
 
-    protected function assertCollectionNegative(array $elementList, $showIndex = true)
+    public function assertCollectionNegative(array $elementList)
     {
         foreach ($elementList as $index => $e) {
             $actualText = $e->text();
-            $prefix = $showIndex ? ('Element[' . $index . ']: ') : '';
+            $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
             \PHPUnit_Framework_Assert::assertNotEquals(
                 $this->expected,
                 $actualText,

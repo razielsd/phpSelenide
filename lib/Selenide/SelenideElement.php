@@ -132,12 +132,13 @@ class SelenideElement
      *
      * @param Condition_Rule $condition
      * @return $this
+     * @throws Exception_ElementNotFound
      */
     public function shouldHave(Condition_Rule $condition)
     {
         $element = $this->getElement();
         try {
-            $condition->applyAssert($element);
+            $condition->applyAssert([$element]);
         } catch (Exception_ElementNotFound $e) {
             throw new Exception_ElementNotFound(
                 'Not found element ' . $this->name. ' ' . $this->getLocator() . ' with condition ' .
@@ -171,7 +172,7 @@ class SelenideElement
     public function shouldNotHave(Condition_Rule $condition)
     {
         $element = $this->getElement();
-        $condition->applyAssertNegative($element);
+        $condition->applyAssertNegative([$element]);
         return $this;
     }
 
@@ -184,7 +185,7 @@ class SelenideElement
      */
     public function setValue($value)
     {
-        $element = $this->getElement();
+        $element = $this->getExistsElement();
         $this->selenide->getReport()->addChildEvent('Set value: ' . $value);
         $element->value($value);
         return $this;
@@ -199,7 +200,7 @@ class SelenideElement
     public function pressEnter()
     {
         $driver = $this->driver->webDriver();
-        $element = $this->getElement();
+        $element = $this->getExistsElement();
         $this->selenide->getReport()->addChildEvent('press Enter');
         $element->keys([$driver::KEY_ENTER]);
         return $this;
@@ -227,7 +228,7 @@ class SelenideElement
      */
     public function doubleClick()
     {
-        $element = $this->getElement();
+        $element = $this->getExistsElement();
         $this->selenide->getReport()->addChildEvent('Double click');
         $element->dbclick();
         return $this;
@@ -258,7 +259,7 @@ class SelenideElement
      */
     public function selectOptionByValue($value)
     {
-        $element = $this->getElement();
+        $element = $this->getExistsElement();
         $this->selenide->getReport()->addChildEvent('Set element value: ' . $value);
         $element->value($value);
         return $this;
@@ -272,7 +273,7 @@ class SelenideElement
      */
     public function val()
     {
-        $element = $this->getElement();
+        $element = $this->getExistsElement();
         $this->selenide->getReport()->addChildEvent('Read value');
         return $element->value();
     }
@@ -286,7 +287,7 @@ class SelenideElement
      */
     public function attribute($name)
     {
-        $element = $this->getElement();
+        $element = $this->getExistsElement();
         $this->selenide->getReport()->addChildEvent('Get attribute: ' . $name);
         $element->attribute($name);
         return $this;
@@ -300,9 +301,33 @@ class SelenideElement
      */
     public function text()
     {
-        $element = $this->getElement();
+        $element = $this->getExistsElement();
         $this->selenide->getReport()->addChildEvent('Get element text');
         return $element->text();
+    }
+
+
+    /**
+     * Check exists element
+     *
+     * @return bool
+     */
+    public function exists()
+    {
+        $element = $this->getElement();
+        return !is_null($element);
+    }
+
+
+    /**
+     * Check element visible
+     *
+     * @return bool
+     */
+    public function isDispayed()
+    {
+        $element = $this->getExistsElement();
+        return $element->isDisplayed();
     }
 
 
@@ -343,5 +368,24 @@ class SelenideElement
         $this->selenide->getReport()->addChildEvent($stateText);
         return $element;
     }
+
+
+    /**
+     * Get element, when not found - throw exception
+     *
+     * @return \WebDriver_Element
+     * @throws Exception_ElementNotFound
+     */
+    protected function getExistsElement()
+    {
+        $element = $this->getElement();
+        if (!$element) {
+            throw new Exception_ElementNotFound(
+                'Not found element ' . $this->name. ' ' . $this->getLocator()
+            );
+        }
+        return $element;
+    }
+
 
 }
