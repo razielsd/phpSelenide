@@ -5,7 +5,7 @@ class Condition_WithText extends Condition_Rule
     implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
 
-    public function matchElement(\WebDriver_Element $element)
+    public function matchElement(\WebDriver_Element $element): bool
     {
         $actualText = $element->text();
         return (mb_strpos($actualText, $this->expected) !== false);

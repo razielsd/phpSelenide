@@ -55,37 +55,52 @@ class Driver
      * @throws Exception
      */
     public function search($selectorList) {
+        $timeout = $this->selenide->configuration()->timeout;
+        $startTime = microtime(true);
+        $searchTimeout = 1;
+        $isFound = false;
+        while (!$isFound) {
+            try {
+                $resultList = $this->searchBySelectors($selectorList);
+                $isFound = true;
+            } catch (Exception_ConditionMatchFailed $e) {
+                $currentTime = microtime(true);
+                if (($currentTime - $startTime) <= $timeout) {
+                    sleep($searchTimeout);
+                } else {
+                    return [];
+                }
+                $this->selenide->getReport()->addChildEvent(
+                    'Received restart from condition: ' . $e->getMessage()
+                );
+            }
+        }
+        $this->selenide->getReport()->addChildEvent('Found: ' . count($resultList));
+        return $resultList;
+    }
+
+
+    protected function searchBySelectors(array $selectorList)
+    {
         $this->selenide->getReport()
             ->addRootEvent('Search element: ' . Util::selectorAsText($selectorList));
         $resultList = [];
         $currentSelector = [];
-        $timeout = $this->selenide->configuration()->timeout;
-        $startTime = microtime(true);
-        $searchTimeout = 1;
         foreach ($selectorList as $index => $selector) {
             $this->selenide->getReport()->addChildEvent('Match: ' . $selector->asString());
             $currentSelector[] = $selector;
             $foundElement = false;
             while (!$foundElement) {
-                try {
-                    if ($index == 0) {
-                        $resultList = $this->searchFirstElement($selector);
-                    } else {
-                        $resultList = $this->searchFromSecondElement($resultList, $selector);
-                    }
-                    foreach ($resultList as &$element) {
-                        //refresh elements
-                        $element->getElementId();
-                    }
-                    $foundElement = true;
-                } catch (\WebDriver_Exception $e) {
-                    $currentTime = microtime(true);
-                    if (($currentTime - $startTime) <= $timeout) {
-                        sleep($searchTimeout);
-                    } else {
-                        return [];
-                    }
+                if ($index == 0) {
+                    $resultList = $this->searchFirstElement($selector);
+                } else {
+                    $resultList = $this->searchFromSecondElement($resultList, $selector);
                 }
+                foreach ($resultList as &$element) {
+                    //refresh elements
+                    $element->getElementId();
+                }
+                $foundElement = true;
             }
             $this->selenide->getReport()->addChildEvent('Found: ' . count($resultList));
         }
@@ -93,18 +108,24 @@ class Driver
     }
 
 
+
     protected function searchFirstElement($selector)
     {
-        switch ($selector->type) {
-            case Selector::TYPE_ELEMENT:
-                $element = $this->webDriver()->find($selector->locator);
-                $resultList = [$element];
-                break;
-            case Selector::TYPE_COLLECTION:
-                $resultList = $this->webDriver()->findAll($selector->locator);
-                break;
-            default:
-                throw new Exception('Logic error: unable search start from condition');
+        // @todo probable error: can't detect  bad locator
+        try {
+            switch ($selector->type) {
+                case Selector::TYPE_ELEMENT:
+                    $element = $this->webDriver()->find($selector->locator);
+                    $resultList = [$element];
+                    break;
+                case Selector::TYPE_COLLECTION:
+                    $resultList = $this->webDriver()->findAll($selector->locator);
+                    break;
+                default:
+                    throw new Exception('Logic error: unable search start from condition');
+            }
+        } catch (\WebDriver_Exception $e) {
+            throw new Exception_ConditionMatchFailed('Find element failed, search restart');
         }
         return $resultList;
     }
@@ -112,20 +133,25 @@ class Driver
 
     protected function searchFromSecondElement($resultList, $selector)
     {
-        switch ($selector->type) {
-            case Selector::TYPE_ELEMENT:
-                $resultList = $this->searchChild($resultList, $selector);
-                break;
-            case Selector::TYPE_COLLECTION:
-                $resultList = $this->searchAllChild($resultList, $selector);
-                break;
-            case Selector::TYPE_CONDITION:
-                $resultList = $this->searchByCondition($resultList, $selector);
-                break;
-            default:
-                throw new Exception(
-                    'Unknown value for Selector::type = ' . $selector->type
-                );
+        // @todo probable error: can't detect  bad locator
+        try {
+            switch ($selector->type) {
+                case Selector::TYPE_ELEMENT:
+                    $resultList = $this->searchChild($resultList, $selector);
+                    break;
+                case Selector::TYPE_COLLECTION:
+                    $resultList = $this->searchAllChild($resultList, $selector);
+                    break;
+                case Selector::TYPE_CONDITION:
+                    $resultList = $this->searchByCondition($resultList, $selector);
+                    break;
+                default:
+                    throw new Exception(
+                        'Unknown value for Selector::type = ' . $selector->type
+                    );
+            }
+        } catch (\WebDriver_Exception $e) {
+            throw new Exception_ConditionMatchFailed('Find element failed, search restart');
         }
         return $resultList;
     }

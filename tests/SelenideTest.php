@@ -42,6 +42,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     public function testSize()
     {
         self::$wd->findAll(By::css('#ires li.gtest'))
+            ->should(Condition::size(10))
+            ->shouldNot(Condition::size(9))
             ->shouldHave(Condition::size(10))
             ->shouldNotHave(Condition::size(9));
     }
@@ -50,6 +52,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     public function testSizeGreaterThen()
     {
         self::$wd->findAll(By::css('#ires li.gtest'))
+            ->should(Condition::sizeGreaterThen(9))
+            ->shouldNot(Condition::sizeGreaterThen(10))
             ->shouldHave(Condition::sizeGreaterThen(9))
             ->shouldNotHave(Condition::sizeGreaterThen(10));
     }
@@ -132,5 +136,73 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->shouldHave(Condition::value('textValue'))
             ->shouldNotHave(Condition::value('textzzZ'));
     }
+
+
+    public function testExistsElement()
+    {
+        $this->assertTrue(
+            self::$wd->find(By::withText('textTwo'))
+                ->should(Condition::withText("textTwo"))
+                ->shouldNot(Condition::withText("textOne"))
+                ->exists(),
+            'Test element must be exists'
+        );
+    }
+
+
+    public function testExistsCollection()
+    {
+        $this->assertTrue(
+            self::$wd->findAll(By::withText('textTwo'))
+                ->should(Condition::withText("textTwo"))
+                ->shouldNot(Condition::withText("textOne"))
+                ->exists(),
+            'Test elements must be exists'
+        );
+    }
+
+
+    public function testDisplayedElement()
+    {
+        $this->assertTrue(
+            self::$wd->find(By::withText('textTwo'))
+                ->should(Condition::withText("textTwo"))
+                ->shouldNot(Condition::withText("textOne"))
+                ->isDispayed(),
+            'Test element must be displayed'
+        );
+    }
+
+
+    public function testDisplayedCollection()
+    {
+        $this->assertTrue(
+            self::$wd->findAll(By::withText('textTwo'))
+                ->should(Condition::withText("textTwo"))
+                ->shouldNot(Condition::withText("textOne"))
+                ->isDispayed(),
+            'Test elements must be displayed'
+        );
+    }
+
+
+    public function testClickElement()
+    {
+
+        self::$wd->findAll(By::withText('textTwo'))
+            ->should(Condition::withText("textTwo"))
+            ->shouldNot(Condition::withText("textOne"))
+            ->click();
+    }
+
+
+    public function testClickCollection()
+    {
+        self::$wd->findAll(By::withText('textTwo'))
+            ->should(Condition::withText("textTwo"))
+            ->shouldNot(Condition::withText("textOne"))
+            ->click();
+    }
+
 
 }

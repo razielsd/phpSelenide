@@ -61,12 +61,13 @@ abstract class Condition_Rule
 
     public function match($collection, $isPositive = true){
         $result = [];
-        if (empty($collection)) {
-            return $result;
-        }
-        if ($this instanceof Condition_Interface_MatchCollection) {
-            $result = $isPositive ?
-                $this->matchCollectionPositive($collection) : $this->matchCollectionNegative($collection);
+        if ($this instanceof Condition_Interface_ExpectedCollection) {
+            $expected = $this->matchCollection($collection);
+            $expected = $isPositive ? $expected : !$expected;
+            if (!$expected) {
+                throw new Exception_ConditionMatchFailed('Match collection failed, search restart');
+            }
+            $result = $collection;
         }  else if ($this instanceof Condition_Interface_Match) {
             $result = [];
             foreach ($collection as $element) {

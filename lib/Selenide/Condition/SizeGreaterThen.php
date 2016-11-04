@@ -2,8 +2,14 @@
 namespace Selenide;
 
 class Condition_SizeGreaterThen extends Condition_Rule
-    implements Condition_Interface_assertCollection
+    implements Condition_Interface_assertCollection, Condition_Interface_ExpectedCollection
 {
+    public function matchCollection(array $collection): bool
+    {
+        return $this->expected < count($collection);
+    }
+
+
     public function assertCollectionPositive(array $elementList)
     {
         $actualSize = count($elementList);

@@ -20,7 +20,7 @@ class ElementsCollection extends SelenideElement
 
 
     /**
-     * Check element visible
+     * Check all elements visible
      *
      * @return bool
      */
@@ -28,11 +28,62 @@ class ElementsCollection extends SelenideElement
     {
         $collection = $this->getCollection();
         $counter = 0;
+        /** @var \WebDriver_Element $element */
         foreach ($collection as $element) {
             $counter += $element->isDisplayed() ? 1 : 0;
         }
         return count($collection) == $counter;
     }
+
+
+    /**
+     * Click all elements
+     *
+     * @return $this
+     */
+    public function click()
+    {
+        $collection = $this->getCollection();
+        /** @var \WebDriver_Element $element */
+        foreach ($collection as $element) {
+            $element->click();
+        }
+        return $this;
+    }
+
+
+    /**
+     * DoubleClick all elements
+     *
+     * @return $this
+     */
+    public function doubleClick()
+    {
+        $collection = $this->getCollection();
+        /** @var \WebDriver_Element $element */
+        foreach ($collection as $element) {
+            $element->dbclick();
+        }
+        return $this;
+    }
+
+
+    /**
+     * Check all elements exists
+     *
+     * @return bool
+     */
+    public function exists()
+    {
+        $collection = $this->getCollection();
+        $counter = 0;
+        /** @var \WebDriver_Element $element */
+        foreach ($collection as $element) {
+            $counter += $element->isPresent() ? 1 : 0;
+        }
+        return count($collection) == $counter;
+    }
+
 
 
     /**
