@@ -3,7 +3,7 @@ namespace Selenide;
 
 class ElementsCollection extends SelenideElement
 {
-    public function shouldHave(Condition_Rule $condition)
+    public function assert(Condition_Rule $condition)
     {
         $collection = $this->getCollection();
         $condition->applyAssert($collection);
@@ -11,7 +11,7 @@ class ElementsCollection extends SelenideElement
     }
 
 
-    public function shouldNotHave(Condition_Rule $condition)
+    public function assertNot(Condition_Rule $condition)
     {
         $collection = $this->getCollection();
         $condition->applyAssertNegative($collection);

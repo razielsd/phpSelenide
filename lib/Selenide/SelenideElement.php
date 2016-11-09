@@ -53,10 +53,10 @@ class SelenideElement
      * @param $locator
      * @return SelenideElement
      */
-    public function find($locator)
+    public function find(By $locator)
     {
         $selector = new Selector();
-        $selector->locator = $locator;
+        $selector->locator = $locator->asString();
         $selector->type = Selector::TYPE_ELEMENT;
         $selectorList = $this->selectorList;
         $selectorList[] = $selector;
@@ -71,10 +71,10 @@ class SelenideElement
      * @param $locator
      * @return ElementsCollection
      */
-    public function findAll($locator)
+    public function findAll(By $locator)
     {
         $selector = new Selector();
-        $selector->locator = $locator;
+        $selector->locator = $locator->asString();
         $selector->type = Selector::TYPE_COLLECTION;
         $selectorList = $this->selectorList;
         $selectorList[] = $selector;
@@ -116,25 +116,13 @@ class SelenideElement
 
 
     /**
-     * Assert condition (alias for shouldHave)
-     *
-     * @param Condition_Rule $condition
-     * @return $this
-     */
-    public function shouldBe(Condition_Rule $condition)
-    {
-        return $this->shouldHave($condition);
-    }
-
-
-    /**
      * Assert condition
      *
      * @param Condition_Rule $condition
      * @return $this
      * @throws Exception_ElementNotFound
      */
-    public function shouldHave(Condition_Rule $condition)
+    public function assert(Condition_Rule $condition)
     {
         $element = $this->getElement();
         try {
@@ -152,24 +140,12 @@ class SelenideElement
 
 
     /**
-     * Assert not condition (alias for shouldNotHave)
-     *
-     * @param Condition_Rule $condition
-     * @return SelenideElement
-     */
-    public function shouldNotBe(Condition_Rule $condition)
-    {
-        return $this->shouldNotHave($condition);
-    }
-
-
-    /**
      * Assert not condition
      *
      * @param Condition_Rule $condition
      * @return $this
      */
-    public function shouldNotHave(Condition_Rule $condition)
+    public function assertNot(Condition_Rule $condition)
     {
         $element = $this->getElement();
         $condition->applyAssertNegative([$element]);

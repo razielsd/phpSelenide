@@ -29,6 +29,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         parent::setUpBeforeClass();
         self::$wd = new \Selenide\Selenide();
         self::$wd->configuration()->baseUrl = self::$baseUrl;
+        self::$wd->configuration()->timeout = 5;
         self::$wd->connect();
         self::$wd->open(self::$testUrl);
     }
@@ -44,8 +45,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd->findAll(By::css('#ires li.gtest'))
             ->should(Condition::size(10))
             ->shouldNot(Condition::size(9))
-            ->shouldHave(Condition::size(10))
-            ->shouldNotHave(Condition::size(9));
+            ->assert(Condition::size(10))
+            ->assertNot(Condition::size(9));
     }
 
 
@@ -54,8 +55,38 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd->findAll(By::css('#ires li.gtest'))
             ->should(Condition::sizeGreaterThen(9))
             ->shouldNot(Condition::sizeGreaterThen(10))
-            ->shouldHave(Condition::sizeGreaterThen(9))
-            ->shouldNotHave(Condition::sizeGreaterThen(10));
+            ->assert(Condition::sizeGreaterThen(9))
+            ->assertNot(Condition::sizeGreaterThen(10));
+    }
+
+
+    public function testSizeGreaterThenOrEqual()
+    {
+        self::$wd->findAll(By::css('#ires li.gtest'))
+            ->should(Condition::sizeGreaterThenOrEqual(10))
+            ->shouldNot(Condition::sizeGreaterThenOrEqual(11))
+            ->assert(Condition::sizeGreaterThenOrEqual(10))
+            ->assertNot(Condition::sizeGreaterThenOrEqual(11));
+    }
+
+
+    public function testSizeLessThen()
+    {
+        self::$wd->findAll(By::css('#ires li.gtest'))
+            ->should(Condition::sizeLessThen(11))
+            ->shouldNot(Condition::sizeLessThen(10))
+            ->assert(Condition::sizeLessThen(11))
+            ->assertNot(Condition::sizeLessThen(10));
+    }
+
+
+    public function testSizeLessThenOrEqual()
+    {
+        self::$wd->findAll(By::css('#ires li.gtest'))
+            ->should(Condition::sizeLessThenOrEqual(10))
+            ->shouldNot(Condition::sizeLessThenOrEqual(9))
+            ->assert(Condition::sizeLessThenOrEqual(10))
+            ->assertNot(Condition::sizeLessThenOrEqual(9));
     }
 
 
@@ -64,8 +95,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd->find(By::text('textOne'))
             ->should(Condition::text("textOne"))
             ->shouldNot(Condition::text("textTwo"))
-            ->shouldHave(Condition::text("textOne"))
-            ->shouldNotHave(Condition::text("textTwo"));
+            ->assert(Condition::text("textOne"))
+            ->assertNot(Condition::text("textTwo"));
     }
 
     public function testTextCollection()
@@ -73,8 +104,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd->findAll(By::text('textOne'))
             ->should(Condition::text("textOne"))
             ->shouldNot(Condition::text("textTwo"))
-            ->shouldHave(Condition::text("textOne"))
-            ->shouldNotHave(Condition::text("textTwo"));
+            ->assert(Condition::text("textOne"))
+            ->assertNot(Condition::text("textTwo"));
     }
 
 
@@ -83,8 +114,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd->find(By::withText('textTwo'))
             ->should(Condition::withText("textTwo"))
             ->shouldNot(Condition::withText("textOne"))
-            ->shouldHave(Condition::withText("textTwo"))
-            ->shouldNotHave(Condition::withText("textOne"));
+            ->assert(Condition::withText("textTwo"))
+            ->assertNot(Condition::withText("textOne"));
     }
 
     public function testWithTextCollection()
@@ -92,8 +123,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd->findAll(By::withText('textTwo'))
             ->should(Condition::withText("textTwo"))
             ->shouldNot(Condition::withText("textOne"))
-            ->shouldHave(Condition::withText("textTwo"))
-            ->shouldNotHave(Condition::withText("textOne"));
+            ->assert(Condition::withText("textTwo"))
+            ->assertNot(Condition::withText("textOne"));
     }
 
 
@@ -101,7 +132,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         self::$wd->find(By::withText('textTwo'))
             ->should(Condition::visible())
-            ->shouldHave(Condition::visible());
+            ->assert(Condition::visible());
     }
 
 
@@ -109,7 +140,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         self::$wd->findAll(By::withText('textTwo'))
             ->should(Condition::visible())
-            ->shouldHave(Condition::visible());
+            ->assert(Condition::visible());
     }
 
 
@@ -117,7 +148,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         self::$wd->find(By::id('hidden-div'))
             ->shouldNot(Condition::visible())
-            ->shouldNotHave(Condition::visible());
+            ->assertNot(Condition::visible());
     }
 
 
@@ -125,7 +156,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         self::$wd->findAll(By::id('hidden-div'))
             ->shouldNot(Condition::visible())
-            ->shouldNotHave(Condition::visible());
+            ->assertNot(Condition::visible());
     }
 
     public function testConditionValue()
@@ -133,8 +164,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd->find(By::tagName('input'))
             ->should(Condition::value('textValue'))
             ->shouldNot(Condition::value('textzzZ'))
-            ->shouldHave(Condition::value('textValue'))
-            ->shouldNotHave(Condition::value('textzzZ'));
+            ->assert(Condition::value('textValue'))
+            ->assertNot(Condition::value('textzzZ'));
     }
 
 

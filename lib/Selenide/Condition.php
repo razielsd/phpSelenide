@@ -19,11 +19,47 @@ class Condition
      * Checks that collection has the given size
      *
      * @param $size
-     * @return Condition_Size
+     * @return Condition_SizeGreaterThen
      */
     public static function sizeGreaterThen($size)
     {
         return new Condition_SizeGreaterThen($size);
+    }
+
+
+    /**
+     * Checks that collection has the given size
+     *
+     * @param $size
+     * @return Condition_SizeGreaterThenOrEqual
+     */
+    public static function sizeGreaterThenOrEqual($size)
+    {
+        return new Condition_SizeGreaterThenOrEqual($size);
+    }
+
+
+    /**
+     * Checks that collection has the given size
+     *
+     * @param $size
+     * @return Condition_SizeLessThen
+     */
+    public static function sizeLessThen($size)
+    {
+        return new Condition_SizeLessThen($size);
+    }
+
+
+    /**
+     * Checks that collection has the given size
+     *
+     * @param $size
+     * @return Condition_SizeLessThenOrEqual
+     */
+    public static function sizeLessThenOrEqual($size)
+    {
+        return new Condition_SizeLessThenOrEqual($size);
     }
 
 

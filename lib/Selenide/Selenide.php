@@ -36,10 +36,10 @@ class Selenide
      * @param $locator
      * @return SelenideElement
      */
-    public function find($locator)
+    public function find(By $locator)
     {
         $selector = new Selector();
-        $selector->locator = $locator;
+        $selector->locator = $locator->asString();
         $selector->type = Selector::TYPE_ELEMENT;
         return new SelenideElement($this, [$selector]);
     }
@@ -51,10 +51,10 @@ class Selenide
      * @param $locator
      * @return ElementsCollection
      */
-    public function findAll($locator)
+    public function findAll(By $locator)
     {
         $selector = new Selector();
-        $selector->locator = $locator;
+        $selector->locator = $locator->asString();
         $selector->type = Selector::TYPE_COLLECTION;
         return new ElementsCollection($this, [$selector]);
     }
@@ -65,6 +65,8 @@ class Selenide
      *
      * @param $url
      * @return $this
+     *
+     * @throws Exception
      */
     public function open($url)
     {
