@@ -14,7 +14,11 @@
 ## Condition list
 * size
 * sizeGreaterThen
+* sizeGreaterThenOrEqual
+* sizeLessThen
+* sizeLessThenOrEqual
 * text
 * withText
 * value
+* visible
 
