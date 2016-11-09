@@ -290,7 +290,11 @@ class SelenideElement
      */
     public function exists()
     {
-        $element = $this->getElement();
+        try {
+            $element = $this->getElement();
+        } catch (\WebDriver_Exception_FailedCommand $e) {
+            $element = null;
+        }
         return !is_null($element);
     }
 

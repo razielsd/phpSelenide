@@ -81,7 +81,7 @@ class ElementsCollection extends SelenideElement
         foreach ($collection as $element) {
             $counter += $element->isPresent() ? 1 : 0;
         }
-        return count($collection) == $counter;
+        return (count($collection) == $counter) && ($counter > 0);
     }
 
 

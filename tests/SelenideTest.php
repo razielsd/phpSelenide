@@ -181,6 +181,16 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testNotExistsElement()
+    {
+        $this->assertFalse(
+            self::$wd->find(By::withText('NotExistedElement'))
+                ->exists(),
+            'Test element must be not exists'
+        );
+    }
+
+
     public function testExistsCollection()
     {
         $this->assertTrue(
@@ -189,6 +199,16 @@ class SelenideTest extends PHPUnit_Framework_TestCase
                 ->shouldNot(Condition::withText("textOne"))
                 ->exists(),
             'Test elements must be exists'
+        );
+    }
+
+
+    public function testNotExistsCollection()
+    {
+        $this->assertFalse(
+            self::$wd->findAll(By::withText('NotExistsCollection'))
+                ->exists(),
+            'Test elements must be not exists'
         );
     }
 
