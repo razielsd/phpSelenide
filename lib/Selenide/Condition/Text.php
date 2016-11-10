@@ -36,12 +36,6 @@ class Condition_Text extends Condition_Rule
                 $actualText,
                 $prefix . 'Found text: ' . $this->expected . '. Actual: ' . $actualText
             );
-            if ($this->expected == $actualText) {
-
-                throw new Assertion(
-
-                );
-            }
         }
         return $this;
     }

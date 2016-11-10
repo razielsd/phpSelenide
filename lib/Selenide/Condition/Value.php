@@ -7,6 +7,7 @@ class Condition_Value extends Condition_Rule
 
     public function matchElement(\WebDriver_Element $element): bool
     {
+        var_dump($this->getActualValue($element) . ' == ' . $this->expected);
         return $this->getActualValue($element) == $this->expected;
     }
 
@@ -14,6 +15,10 @@ class Condition_Value extends Condition_Rule
 
     public function assertCollectionPositive(array $elementList)
     {
+        if (empty($elementList)) {
+            var_dump(__METHOD__ . '#' . '->JOPA');
+            throw new Exception_ElementNotFound('Elements not found for assertion');
+        }
         foreach ($elementList as $index => $e) {
             $actual = $this->getActualValue($e);
             \PHPUnit_Framework_Assert::assertEquals(
@@ -28,6 +33,9 @@ class Condition_Value extends Condition_Rule
 
     public function assertCollectionNegative(array $elementList)
     {
+        if (empty($elementList)) {
+            throw new Exception_ElementNotFound('Elements not found for assertion');
+        }
         foreach ($elementList as $index => $e) {
             $actual = $this->getActualValue($e);
             \PHPUnit_Framework_Assert::assertNotEquals(
@@ -42,6 +50,9 @@ class Condition_Value extends Condition_Rule
 
     public function getActualValue(\WebDriver_Element $element)
     {
-        return $element->value();
+        var_dump(__METHOD__);
+        $r =  $element->value();
+        var_dump(__METHOD__ . '#2');
+        return $r;
     }
 }

@@ -96,14 +96,19 @@ class Driver
                 } else {
                     $resultList = $this->searchFromSecondElement($resultList, $selector);
                 }
+                $foundElement = true;
+            }
+            try {
                 foreach ($resultList as &$element) {
                     //refresh elements
                     $element->getElementId();
                 }
-                $foundElement = true;
+            } catch (\WebDriver_Exception_FailedCommand $e) {
+                throw new Exception_ConditionMatchFailed('Not found elements on synchronize with page');
             }
             $this->selenide->getReport()->addChildEvent('Found: ' . count($resultList));
         }
+
         return $resultList;
     }
 

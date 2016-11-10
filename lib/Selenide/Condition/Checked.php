@@ -1,12 +1,12 @@
 <?php
 namespace Selenide;
 
-class Condition_Visible extends Condition_Rule
+class Condition_Checked extends Condition_Rule
     implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
     public function matchElement(\WebDriver_Element $element): bool
     {
-        return $element->isDisplayed();
+        return $element->checked();
     }
 
 
@@ -19,8 +19,8 @@ class Condition_Visible extends Condition_Rule
         foreach ($elementList as $index => $element) {
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
             \PHPUnit_Framework_Assert::assertTrue(
-                $element->isDisplayed(),
-                $prefix . 'Element is not visible'
+                $element->checked(),
+                $prefix . 'Element is not checked'
             );
         }
         return $this;
@@ -36,8 +36,8 @@ class Condition_Visible extends Condition_Rule
         foreach ($elementList as $index => $element) {
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
             \PHPUnit_Framework_Assert::assertFalse(
-                $element->isDisplayed(),
-                $prefix . 'Element is visible'
+                $element->checked(),
+                $prefix . 'Element is checked'
             );
         }
         return $this;

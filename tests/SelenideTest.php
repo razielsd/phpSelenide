@@ -118,6 +118,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->assertNot(Condition::withText("textOne"));
     }
 
+
     public function testWithTextCollection()
     {
         self::$wd->findAll(By::withText('textTwo'))
@@ -161,7 +162,17 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
     public function testConditionValue()
     {
-        self::$wd->find(By::tagName('input'))
+        self::$wd->find(By::id("checkedBox"))
+            ->should(Condition::value('1'))
+            ->shouldNot(Condition::value('2'))
+            ->assert(Condition::value('1'))
+            ->assertNot(Condition::value('2'));
+    }
+
+
+    public function testConditionValueCollection()
+    {
+        self::$wd->findAll(By::tagName('input'))
             ->should(Condition::value('textValue'))
             ->shouldNot(Condition::value('textzzZ'))
             ->assert(Condition::value('textValue'))
@@ -183,6 +194,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
     public function testNotExistsElement()
     {
+        //@todo slowly, check & fix
         $this->assertFalse(
             self::$wd->find(By::withText('NotExistedElement'))
                 ->exists(),
@@ -256,4 +268,77 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testAttribute()
+    {
+        $attrValue = self::$wd->find(By::id('checkedBox'))
+            ->attribute('id');
+        $this->assertEquals('checkedBox', $attrValue, 'Attribute id must be is "checkbox"');
+    }
+
+
+    /**
+     * @expectedException \Selenide\Exception_ElementNotFound
+     */
+    public function testNotExistsAttribute()
+    {
+        self::$wd->find(By::id('checkedBox'))
+            ->attribute('unknown_attribute');
+    }
+
+
+    public function testConditionChecked()
+    {
+        self::$wd->find(By::xpath('//input[@type="checkbox"]'))
+            ->should(Condition::checked())
+            ->assert(Condition::checked());
+    }
+
+
+    public function testConditionNotChecked()
+    {
+        //failure
+        self::$wd->findAll(By::xpath('//input[@type="checkbox"]'))
+            ->shouldNot(Condition::checked())
+            ->assertNot(Condition::checked());
+    }
+
+
+    public function testConditionAttribute()
+    {
+        self::$wd->find(By::tagName('div'))
+            ->should(Condition::attribute('data-attribute', 'attribute-test'))
+            ->shouldNot(Condition::attribute('data-attribute', 'none'))
+            ->assert(Condition::size(1))
+            ->assert(Condition::attribute('data-attribute', 'attribute-test'))
+            ->assertNot(Condition::attribute('data-attribute', 'none'));
+    }
+
+
+    public function testConditionAttributeNotExists()
+    {
+        self::$wd->find(By::tagName('div'))
+            ->should(Condition::attribute('no-attribute', 'attribute-test'))
+            ->shouldNot(Condition::attribute('no-attribute', 'none'))
+            ->assert(Condition::size(0));
+    }
+
+
+    public function testConditionAttributeCollection()
+    {
+        self::$wd->findAll(By::tagName('div'))
+            ->should(Condition::attribute('data-attribute', 'attribute-test'))
+            ->shouldNot(Condition::attribute('data-attribute', 'none'))
+            ->assert(Condition::size(2))
+            ->assert(Condition::attribute('data-attribute', 'attribute-test'))
+            ->assertNot(Condition::attribute('data-attribute', 'none'));
+    }
+
+
+    public function testConditionAttributeCollectionNotExists()
+    {
+        self::$wd->findAll(By::tagName('div'))
+            ->should(Condition::attribute('no-attribute', 'attribute-test'))
+            ->shouldNot(Condition::attribute('no-attribute', 'none'))
+            ->assert(Condition::size(0));
+    }
 }

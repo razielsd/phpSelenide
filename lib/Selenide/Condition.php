@@ -110,4 +110,21 @@ class Condition
     }
 
 
+    /**
+     * Check checkbox checked
+     *
+     * @return Condition_Checked
+     */
+    public static function checked()
+    {
+        return new Condition_Checked(null);
+    }
+
+
+
+    public static function attribute($attrName, $value)
+    {
+        return new Condition_Attribute($attrName, $value);
+    }
+
 }

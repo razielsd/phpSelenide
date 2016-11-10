@@ -124,9 +124,9 @@ class SelenideElement
      */
     public function assert(Condition_Rule $condition)
     {
-        $element = $this->getElement();
+        $collection = $this->getCollection();
         try {
-            $condition->applyAssert([$element]);
+            $condition->applyAssert($collection);
         } catch (Exception_ElementNotFound $e) {
             throw new Exception_ElementNotFound(
                 'Not found element ' . $this->name. ' ' . $this->getLocator() . ' with condition ' .
@@ -147,8 +147,8 @@ class SelenideElement
      */
     public function assertNot(Condition_Rule $condition)
     {
-        $element = $this->getElement();
-        $condition->applyAssertNegative([$element]);
+        $collection = $this->getCollection();
+        $condition->applyAssertNegative($collection);
         return $this;
     }
 
@@ -259,14 +259,18 @@ class SelenideElement
      * Get element attribute
      *
      * @param $name
-     * @return $this
+     * @return string
      */
     public function attribute($name)
     {
         $element = $this->getExistsElement();
         $this->selenide->getReport()->addChildEvent('Get attribute: ' . $name);
-        $element->attribute($name);
-        return $this;
+        $attrValue =  $element->attribute($name);
+
+        if ($attrValue === null) {
+            throw new Exception_ElementNotFound('Attribute ' . $name . ' not found');
+        }
+        return $attrValue;
     }
 
 
@@ -296,6 +300,18 @@ class SelenideElement
             $element = null;
         }
         return !is_null($element);
+    }
+
+
+    /**
+     * Check checkbox checked
+     *
+     * @return bool
+     */
+    public function checked()
+    {
+        $element = $this->getExistsElement();
+        return $element->checked();
     }
 
 
@@ -347,6 +363,21 @@ class SelenideElement
         $stateText = $element ? 'Found element' : 'Not found element';
         $this->selenide->getReport()->addChildEvent($stateText);
         return $element;
+    }
+
+
+    /**
+     * @return \WebDriver_Element
+     * @throws Exception
+     */
+    protected function getCollection()
+    {
+        $elementList = [];
+        $element = $this->getElement();
+        if (!is_null($element)) {
+            $elementList[] = $element;
+        }
+        return $elementList;
     }
 
 

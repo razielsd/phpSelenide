@@ -85,6 +85,39 @@ class ElementsCollection extends SelenideElement
     }
 
 
+    /**
+     * Check all elements checked
+     *
+     * @return bool
+     */
+    public function checked()
+    {
+        $collection = $this->getCollection();
+        $counter = 0;
+        /** @var \WebDriver_Element $element */
+        foreach ($collection as $element) {
+            $counter += $element->checked() ? 1 : 0;
+        }
+        return (count($collection) == $counter) && ($counter > 0);
+    }
+
+
+    /**
+     * Get all elements attribute with name
+     *
+     * @return array
+     */
+    public function attribute($name)
+    {
+        $collection = $this->getCollection();
+        $attrList = [];
+        /** @var \WebDriver_Element $element */
+        foreach ($collection as $element) {
+            $attrList[] = $element->attribute($name);
+        }
+        return $attrList;
+    }
+
 
     /**
      * @return \WebDriver_Element
