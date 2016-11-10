@@ -194,7 +194,6 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
     public function testNotExistsElement()
     {
-        //@todo slowly, check & fix
         $this->assertFalse(
             self::$wd->find(By::withText('NotExistedElement'))
                 ->exists(),
