@@ -20,5 +20,6 @@
 * text
 * withText
 * value
+* attribute
 * visible
 * checked
