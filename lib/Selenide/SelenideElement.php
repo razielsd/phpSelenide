@@ -184,7 +184,7 @@ class SelenideElement
      */
     public function click()
     {
-        $element = $this->getElement();
+        $element = $this->getExistsElement();
         $this->selenide->getReport()->addChildEvent('Click');
         $element->click();
         return $this;
