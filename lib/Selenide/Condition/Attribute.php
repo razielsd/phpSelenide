@@ -13,6 +13,17 @@ class Condition_Attribute extends Condition_Rule
     }
 
 
+    /**
+     * Get string definition about filter, for example: text(auchtung)
+     *
+     * @return string
+     */
+    public function getLocator()
+    {
+        return $this->getName() . '(' . $this->attrName . ' = ' . $this->expected . ')';
+    }
+
+
     public function matchElement(\WebDriver_Element $element): bool
     {
         $actualValue = $this->getActualValue($element);
@@ -61,7 +72,7 @@ class Condition_Attribute extends Condition_Rule
 
     protected function getActualValue(\WebDriver_Element $element)
     {
-        return $element->attribute($this->attrName);;
+        return $element->attribute($this->attrName);
     }
 
 }

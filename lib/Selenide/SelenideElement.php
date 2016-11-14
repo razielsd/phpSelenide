@@ -16,12 +16,6 @@ class SelenideElement
      * @var Selector[]
      */
     protected $selectorList = [];
-    /**
-     * Element name
-     * @var string
-     */
-    protected $name = null;
-
 
     protected $description = '';
 
@@ -320,7 +314,7 @@ class SelenideElement
      *
      * @return bool
      */
-    public function isDispayed()
+    public function isDisplayed()
     {
         $element = $this->getExistsElement();
         return $element->isDisplayed();
@@ -335,19 +329,6 @@ class SelenideElement
     public function getLocator()
     {
         return Util::selectorAsText($this->selectorList);
-    }
-
-
-    /**
-     * Set element name
-     *
-     * @param $name
-     * @return $this
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-        return $this;
     }
 
 
@@ -397,6 +378,5 @@ class SelenideElement
         }
         return $element;
     }
-
 
 }

@@ -230,7 +230,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             self::$wd->find(By::withText('textTwo'))
                 ->should(Condition::withText("textTwo"))
                 ->shouldNot(Condition::withText("textOne"))
-                ->isDispayed(),
+                ->isDisplayed(),
             'Test element must be displayed'
         );
     }
@@ -242,7 +242,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             self::$wd->findAll(By::withText('textTwo'))
                 ->should(Condition::withText("textTwo"))
                 ->shouldNot(Condition::withText("textOne"))
-                ->isDispayed(),
+                ->isDisplayed(),
             'Test elements must be displayed'
         );
     }
@@ -304,7 +304,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
     public function testConditionAttribute()
     {
-        self::$wd->find(By::tagName('div'))
+        self::$wd->findAll(By::xpath('//div[@data-attr-single]'))
             ->should(Condition::attribute('data-attribute', 'attribute-test'))
             ->shouldNot(Condition::attribute('data-attribute', 'none'))
             ->assert(Condition::size(1))

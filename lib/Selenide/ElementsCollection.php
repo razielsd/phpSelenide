@@ -24,7 +24,7 @@ class ElementsCollection extends SelenideElement
      *
      * @return bool
      */
-    public function isDispayed()
+    public function isDisplayed()
     {
         $collection = $this->getCollection();
         $counter = 0;

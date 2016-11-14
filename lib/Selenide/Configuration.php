@@ -6,7 +6,9 @@ class Configuration
 {
     public $host = '127.0.0.1';
     public $port = 4444;
-    public $timeout = 10;
+    public $timeout = 5;
+    public $waitTimeout = 30;
+
     /**
      * Selenium session id for reuse active session
      * @var string

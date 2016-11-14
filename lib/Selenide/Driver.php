@@ -107,6 +107,9 @@ class Driver
                 throw new Exception_ConditionMatchFailed('Not found elements on synchronize with page');
             }
             $this->selenide->getReport()->addChildEvent('Found: ' . count($resultList));
+            if (empty($resultList)) {
+                break;
+            }
         }
 
         return $resultList;
