@@ -340,4 +340,16 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->shouldNot(Condition::attribute('no-attribute', 'none'))
             ->assert(Condition::size(0));
     }
+
+
+    public function testConditionChild()
+    {
+        self::$wd->findAll(By::xpath('//div[@id="childTest"]/div'))
+            ->should(Condition::child(By::xpath('div[contains(@data-test, "test01")]')))
+            ->shouldNot(Condition::child(By::xpath('div[contains(@data-test, "test03")]')))
+            ->assert(Condition::size(2))
+            ->assert(Condition::child(By::xpath('div[contains(@data-test, "test01")]')))
+            ->assertNot(Condition::child(By::xpath('div[contains(@data-test, "test03")]')))
+        ;
+    }
 }

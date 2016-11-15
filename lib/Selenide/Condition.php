@@ -121,10 +121,21 @@ class Condition
     }
 
 
-
     public static function attribute($attrName, $value)
     {
         return new Condition_Attribute($attrName, $value);
+    }
+
+
+    /**
+     * Check child element exists
+     *
+     * @param By $locator
+     * @return Condition_Child
+     */
+    public static function child(By $locator)
+    {
+        return new Condition_Child($locator);
     }
 
 }
