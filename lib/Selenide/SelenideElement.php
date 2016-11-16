@@ -123,7 +123,8 @@ class SelenideElement
             $condition->applyAssert($collection);
         } catch (Exception_ElementNotFound $e) {
             throw new Exception_ElementNotFound(
-                'Not found element ' . $this->name. ' ' . $this->getLocator() . ' with condition ' .
+                $this->description .
+                ': Not found element ' . $this->getLocator() . ' with condition ' .
                     $condition->getLocator(),
                 0,
                 $e);
@@ -373,7 +374,8 @@ class SelenideElement
         $element = $this->getElement();
         if (!$element) {
             throw new Exception_ElementNotFound(
-                'Not found element ' . $this->name. ' ' . $this->getLocator()
+                $this->description .
+                ': Not found element ' . $this->getLocator()
             );
         }
         return $element;
