@@ -55,6 +55,7 @@ class SelenideElement
         $selectorList = $this->selectorList;
         $selectorList[] = $selector;
         $element = new SelenideElement($this->selenide, $selectorList);
+        $element->description($this->description);
         return $element;
     }
 
@@ -73,6 +74,7 @@ class SelenideElement
         $selectorList = $this->selectorList;
         $selectorList[] = $selector;
         $collection = new ElementsCollection($this->selenide, $selectorList);
+        $collection->description($this->description);
         return $collection;
     }
 

@@ -29,7 +29,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         parent::setUpBeforeClass();
         self::$wd = new \Selenide\Selenide();
         self::$wd->configuration()->baseUrl = self::$baseUrl;
-        self::$wd->configuration()->timeout = 5;
+        self::$wd->configuration()->timeout = 3;
         self::$wd->connect();
         self::$wd->open(self::$testUrl);
     }
@@ -39,6 +39,17 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         self::$wd->find(By::id('e_textarea'))->setValue('Корыто')->pressEnter();
     }
+
+
+    /**
+     * @expectedException Selenide\Exception_ElementNotFound
+     */
+    public function testElementNotFound()
+    {
+        self::$wd->description('Input text into not exists field')
+            ->find(By::id('non_exists_input'))->setValue('Корыто')->pressEnter();
+    }
+
 
     public function testSize()
     {
