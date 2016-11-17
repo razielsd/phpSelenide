@@ -12,6 +12,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
      * @var Selenide
      */
     protected static $wd = null;
+    protected static $timeout = 5;
     /**
      * Url for test page in tests/www/webdrivertest.html
      * @var string
@@ -20,7 +21,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     protected static $baseUrl = 'http://devtest.dev';
 
     protected $backupStaticAttributesBlacklist = array(
-        'SelenideTest' => array('wd')
+        'SelenideTest' => array('wd'),
     );
 
 
@@ -29,9 +30,15 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         parent::setUpBeforeClass();
         self::$wd = new \Selenide\Selenide();
         self::$wd->configuration()->baseUrl = self::$baseUrl;
-        self::$wd->configuration()->timeout = 3;
         self::$wd->connect();
         self::$wd->open(self::$testUrl);
+    }
+
+
+    public function setUp()
+    {
+        parent::setUp();
+        self::$wd->configuration()->timeout = self::$timeout;
     }
 
 
@@ -48,6 +55,53 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         self::$wd->description('Input text into not exists field')
             ->find(By::id('non_exists_input'))->setValue('Корыто')->pressEnter();
+    }
+
+
+    public function testExistsElementFound()
+    {
+        $this->assertTrue(
+            self::$wd->find(By::id('e_textarea'))->exists(),
+            'Element must be exists'
+        );
+    }
+
+
+    public function testExistsElementNotFound()
+    {
+        self::$wd->configuration()->timeout = 1;
+        $this->assertFalse(
+            self::$wd->find(By::id('not_found_element'))->exists(),
+            'Element must be not exists'
+        );
+    }
+
+
+    public function testIsDisplayedElementFound()
+    {
+        $this->assertTrue(
+            self::$wd->find(By::id('e_textarea'))->isDisplayed(),
+            'Element must be displayed'
+        );
+    }
+
+
+    public function testIsDisplayedElementNotFound()
+    {
+        self::$wd->configuration()->timeout = 1;
+        $this->assertFalse(
+            self::$wd->find(By::id('not_found_element'))->isDisplayed(),
+            'Element must be not displayed'
+        );
+    }
+
+
+    public function testIsDisplayedElementHidden()
+    {
+        $this->assertFalse(
+            self::$wd->find(By::id('hidden-div'))->isDisplayed(),
+            'Element must be not displayed'
+        );
     }
 
 
@@ -363,4 +417,38 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->assertNot(Condition::child(By::xpath('div[contains(@data-test, "test03")]')))
         ;
     }
+
+
+    public function testConditionRegExp()
+    {
+        self::$wd->find(By::id('regexptest'))
+            ->should(Condition::regexp('/[0-9]+/'))
+            ->shouldNot(Condition::regexp('/[z]+/'))
+            ->assert(Condition::size(1))
+            ->assert(Condition::regexp('/[0-9]+/'))
+            ->assertNot(Condition::regexp('/[z]+/'));
+    }
+
+
+    public function testConditionRegExpNotFound()
+    {
+        self::$wd->find(By::id('regexptest'))
+            ->should(Condition::regexp('/[z]+/'))
+            ->shouldNot(Condition::regexp('/[0-9]+/'))
+            ->assert(Condition::size(0));
+    }
+
+
+    /**
+     * @expectedException \Selenide\Exception_ConditionMatchError
+     */
+    public function testConditionRegExpBadSyntax()
+    {
+        self::$wd->find(By::id('regexptest'))
+            ->should(Condition::regexp('/[z]+'))
+            ->shouldNot(Condition::regexp('/[0-9]+'))
+            ->assert(Condition::size(0));
+    }
+
+
 }

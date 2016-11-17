@@ -138,4 +138,16 @@ class Condition
         return new Condition_Child($locator);
     }
 
+
+    /**
+     * Check element text by regexp
+     *
+     * @param $regExp
+     * @return Condition_RegExp
+     */
+    public static function regexp($regExp)
+    {
+        return new Condition_RegExp($regExp);
+    }
+
 }

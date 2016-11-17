@@ -319,6 +319,11 @@ class SelenideElement
      */
     public function isDisplayed()
     {
+        try {
+            $element = $this->getExistsElement();
+        } catch (Exception_ElementNotFound $e) {
+            return false;
+        }
         $element = $this->getExistsElement();
         return $element->isDisplayed();
     }
