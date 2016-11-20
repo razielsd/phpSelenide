@@ -170,7 +170,9 @@ class Driver
         /** @var \WebDriver_Element $element */
         foreach ($elementList as $element) {
             try {
-                $nodeList = $element->childAll($selector->locator);
+                $locator = $selector->locator->getChildLocator();
+
+                $nodeList = $element->childAll($locator);
                 foreach ($nodeList as $node) {
                     $resultList[] = $node;
                 }

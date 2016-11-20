@@ -142,12 +142,12 @@ class Condition
     /**
      * Check element text by regexp
      *
-     * @param $regExp
-     * @return Condition_RegExp
+     * @param string $regExp
+     * @return Condition_MatchText
      */
-    public static function regexp($regExp)
+    public static function matchText($regExp)
     {
-        return new Condition_RegExp($regExp);
+        return new Condition_MatchText($regExp);
     }
 
 }

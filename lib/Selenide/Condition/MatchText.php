@@ -1,7 +1,7 @@
 <?php
 namespace Selenide;
 
-class Condition_RegExp extends Condition_Rule
+class Condition_MatchText extends Condition_Rule
     implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
     public function matchElement(\WebDriver_Element $element): bool

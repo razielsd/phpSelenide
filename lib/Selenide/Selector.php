@@ -3,7 +3,7 @@ namespace Selenide;
 
 /**
  * @property bool $isPositive
- * @property string $locator
+ * @property By $locator
  * @property int $type
  * @property Condition_Rule $condition
  */

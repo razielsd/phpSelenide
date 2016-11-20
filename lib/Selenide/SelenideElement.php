@@ -50,7 +50,7 @@ class SelenideElement
     public function find(By $locator)
     {
         $selector = new Selector();
-        $selector->locator = $locator->asString();
+        $selector->locator = $locator;
         $selector->type = Selector::TYPE_ELEMENT;
         $selectorList = $this->selectorList;
         $selectorList[] = $selector;
@@ -69,7 +69,7 @@ class SelenideElement
     public function findAll(By $locator)
     {
         $selector = new Selector();
-        $selector->locator = $locator->asString();
+        $selector->locator = $locator;
         $selector->type = Selector::TYPE_COLLECTION;
         $selectorList = $this->selectorList;
         $selectorList[] = $selector;

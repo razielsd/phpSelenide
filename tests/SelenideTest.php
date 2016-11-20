@@ -418,22 +418,22 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testConditionRegExp()
+    public function testConditionMatchText()
     {
         self::$wd->find(By::id('regexptest'))
-            ->should(Condition::regexp('/[0-9]+/'))
-            ->shouldNot(Condition::regexp('/[z]+/'))
+            ->should(Condition::matchText('/[0-9]+/'))
+            ->shouldNot(Condition::matchText('/[z]+/'))
             ->assert(Condition::size(1))
-            ->assert(Condition::regexp('/[0-9]+/'))
-            ->assertNot(Condition::regexp('/[z]+/'));
+            ->assert(Condition::matchText('/[0-9]+/'))
+            ->assertNot(Condition::matchText('/[z]+/'));
     }
 
 
     public function testConditionRegExpNotFound()
     {
         self::$wd->find(By::id('regexptest'))
-            ->should(Condition::regexp('/[z]+/'))
-            ->shouldNot(Condition::regexp('/[0-9]+/'))
+            ->should(Condition::matchText('/[z]+/'))
+            ->shouldNot(Condition::matchText('/[0-9]+/'))
             ->assert(Condition::size(0));
     }
 
@@ -444,8 +444,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     public function testConditionRegExpBadSyntax()
     {
         self::$wd->find(By::id('regexptest'))
-            ->should(Condition::regexp('/[z]+'))
-            ->shouldNot(Condition::regexp('/[0-9]+'))
+            ->should(Condition::matchText('/[z]+'))
+            ->shouldNot(Condition::matchText('/[0-9]+'))
             ->assert(Condition::size(0));
     }
 
@@ -471,7 +471,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         self::$wd
             ->findAll(By::xpath('//div[@data-name="find-all"]'))
-            ->findAll(By::xpath('descendant::div[@data-name="find-all"]'))
+            ->findAll(By::xpath('div[@data-name="find-all"]'))
             ->assert(Condition::size(0));
     }
 
