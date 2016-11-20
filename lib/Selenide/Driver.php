@@ -145,10 +145,8 @@ class Driver
         try {
             switch ($selector->type) {
                 case Selector::TYPE_ELEMENT:
-                    $resultList = $this->searchChild($resultList, $selector);
-                    break;
                 case Selector::TYPE_COLLECTION:
-                    $resultList = $this->searchAllChild($resultList, $selector);
+                    $resultList = $this->searchChild($resultList, $selector);
                     break;
                 case Selector::TYPE_CONDITION:
                     $resultList = $this->searchByCondition($resultList, $selector);
@@ -165,25 +163,9 @@ class Driver
     }
 
 
-    protected function searchChild($elementList, Selector $selector)
+    protected function searchChild($elementList, $selector)
     {
-        $resultList = [];
-        /** @var \WebDriver_Element $element */
-        foreach ($elementList as $element) {
-            try {
-                $node = $element->child($selector->locator);
-                $resultList[] = $node;
-                break;//found node
-            } catch (WebDriver_Exception $e) {
-                //not found, search in next element
-            }
-        }
-        return $resultList;
-    }
-
-
-    protected function searchAllChild($elementList, $selector)
-    {
+        $this->selenide->getReport()->addChildEvent('Search all child');
         $resultList = [];
         /** @var \WebDriver_Element $element */
         foreach ($elementList as $element) {

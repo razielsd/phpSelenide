@@ -28,7 +28,48 @@
         <li>ChildFour</li>
         <li>ChildFive</li>
     </ul>
+<hr />
+    <h1>Test search child</h1>
+    <div data-child="root">
+        <div data-child="child">child</div>
+    </div>
+    <div data-child="child">not child</div>
 
+<hr />
+    <h1>Test focus element (not implemented)</h1>
+    <form>
+        <input name="input01" value="zinput01" onfocus="this.value=this.name + '-focus';"  onblur="this.value=this.name;">
+        <input name="input02" value="zinput02" onfocus="this.value=this.name + '-focus';"  onblur="this.value=this.name;">
+        <input name="input03" value="zinput03" onfocus="this.value=this.name + '-focus';"  onblur="this.value='tt' + this.name;">
+        <input name="input04" value="zinput04" onfocus="this.value=this.name + '-focus';"  onblur="this.value=this.name;">
+    </form>
+<hr />
+<h1>Find All -> Find All</h1>
+    <div data-name="find-all">
+        <div>
+            <div data-name="find-all-child">find-all-child-01</div>
+            <div data-name="find-all-child">find-all-child-02</div>
+        </div>
+        <div data-name="find-all-child">find-all-child-03</div>
+        <div data-name="find-all-child">find-all-child-04</div>
+    </div>
+    <div data-name="find-all">
+        <div>
+            <div data-name="find-all-child">find-all-child-01</div>
+            <div data-name="find-all-child">find-all-child-02</div>
+        </div>
+        <div data-name="find-all-child">find-all-child-03</div>
+        <div data-name="find-all-child">find-all-child-04</div>
+    </div>
+    <div data-name="find-all">
+        <div>
+            <div data-name="find-all-child">find-all-child-01</div>
+            <div data-name="find-all-child">find-all-child-02</div>
+        </div>
+        <div data-name="find-all-child">find-all-child-03</div>
+        <div data-name="find-all-child">find-all-child-04</div>
+    </div>
+    <hr />
 	<div id="e_draggable" class="ui-draggable example">
 	  <p>Draggable</p>
 	</div>

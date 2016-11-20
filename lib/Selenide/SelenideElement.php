@@ -257,6 +257,8 @@ class SelenideElement
      *
      * @param $name
      * @return string
+     *
+     * @throws Exception_ElementNotFound
      */
     public function attribute($name)
     {
@@ -324,7 +326,6 @@ class SelenideElement
         } catch (Exception_ElementNotFound $e) {
             return false;
         }
-        $element = $this->getExistsElement();
         return $element->isDisplayed();
     }
 

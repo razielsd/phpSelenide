@@ -414,8 +414,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->shouldNot(Condition::child(By::xpath('div[contains(@data-test, "test03")]')))
             ->assert(Condition::size(2))
             ->assert(Condition::child(By::xpath('div[contains(@data-test, "test01")]')))
-            ->assertNot(Condition::child(By::xpath('div[contains(@data-test, "test03")]')))
-        ;
+            ->assertNot(Condition::child(By::xpath('div[contains(@data-test, "test03")]')));
     }
 
 
@@ -450,5 +449,50 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->assert(Condition::size(0));
     }
 
+
+    public function testChildSearch()
+    {
+        self::$wd->find(By::xpath('//div[@data-child="root"]'))
+            ->find(By::xpath('//div[@data-child="child"]'))
+            ->assert(Condition::size(1))
+            ->assert(Condition::text('child'));
+    }
+
+
+    public function testFindAllChildren()
+    {
+        self::$wd
+            ->findAll(By::xpath('div[@data-name="find-all-child"]'))
+            ->assert(Condition::size(0));
+    }
+
+
+    public function testFindAllParent()
+    {
+        self::$wd
+            ->findAll(By::xpath('//div[@data-name="find-all"]'))
+            ->findAll(By::xpath('descendant::div[@data-name="find-all"]'))
+            ->assert(Condition::size(0));
+    }
+
+
+    public function testFindAllChild()
+    {
+        self::$wd
+            ->findAll(By::xpath('//div[@data-name="find-all"]'))
+            ->findAll(By::xpath('div[@data-name="find-all-child"]'))
+            ->assert(Condition::size(6))
+            ->assert(Condition::withText('find-all-child-0'));
+    }
+
+
+    public function testFindAllDescedant()
+    {
+        self::$wd
+            ->findAll(By::xpath('//div[@data-name="find-all"]'))
+            ->findAll(By::xpath('descendant::div[@data-name="find-all-child"]'))
+            ->assert(Condition::size(12))
+            ->assert(Condition::withText('find-all-child-0'));
+    }
 
 }
