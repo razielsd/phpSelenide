@@ -100,6 +100,18 @@ class Condition
 
 
     /**
+     * Check element exists
+     *
+     * @return Condition_Exists
+     *
+     */
+    public static function exists()
+    {
+        return new Condition_Exists(null);
+    }
+
+
+    /**
      * Check dispayed
      *
      * @return Condition_Visible

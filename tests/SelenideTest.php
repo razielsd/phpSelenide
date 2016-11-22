@@ -202,6 +202,15 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testConditionVisible_NotExistsElement()
+    {
+        self::$wd->find(By::id('not-exists-lement'))
+            ->should(Condition::visible())
+            ->assert(Condition::size(0));
+    }
+
+
+
     public function testConditionVisibleCollection()
     {
         self::$wd->findAll(By::withText('textTwo'))
@@ -210,11 +219,28 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testInvisible()
+    public function testVisible_HiddenElement()
     {
         self::$wd->find(By::id('hidden-div'))
             ->shouldNot(Condition::visible())
             ->assertNot(Condition::visible());
+    }
+
+
+    /**
+     * @expectedException PHPUnit_Framework_ExpectationFailedException
+     */
+    public function testVisible_NotFoundElement()
+    {
+        self::$wd->find(By::id('not-found-element'))
+            ->assert(Condition::visible());
+    }
+
+
+    public function testVisible_NotFoundElementAssertNot()
+    {
+            self::$wd->find(By::id('not-found-element'))
+                ->assertNot(Condition::visible());
     }
 
 
@@ -513,5 +539,24 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         $this->assertInternalType('array', $text, 'Array expected for collection');
 
     }
+
+
+    public function testConditionExists_ElementExists()
+    {
+        self::$wd->find(By::id('hidden-div'))
+            ->should(Condition::exists())
+            ->assert(Condition::exists());
+    }
+
+
+    public function testConditionExists_ElementNotExists_Failed()
+    {
+        self::$wd->find(By::id('not-exists-element'))
+            ->shouldNot(Condition::exists())
+            ->assertNot(Condition::exists());
+
+    }
+
+
 
 }
