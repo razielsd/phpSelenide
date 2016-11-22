@@ -155,7 +155,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testText()
+    public function testConditionText()
     {
         self::$wd->find(By::text('textOne'))
             ->should(Condition::text("textOne"))
@@ -164,7 +164,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->assertNot(Condition::text("textTwo"));
     }
 
-    public function testTextCollection()
+    public function testConditionTextCollection()
     {
         self::$wd->findAll(By::text('textOne'))
             ->should(Condition::text("textOne"))
@@ -174,7 +174,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testWithText()
+    public function testConditionWithText()
     {
         self::$wd->find(By::withText('textTwo'))
             ->should(Condition::withText("textTwo"))
@@ -184,7 +184,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testWithTextCollection()
+    public function testConditionWithTextCollection()
     {
         self::$wd->findAll(By::withText('textTwo'))
             ->should(Condition::withText("textTwo"))
@@ -194,7 +194,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testVisible()
+    public function testConditionVisible()
     {
         self::$wd->find(By::withText('textTwo'))
             ->should(Condition::visible())
@@ -202,7 +202,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testVisibleCollection()
+    public function testConditionVisibleCollection()
     {
         self::$wd->findAll(By::withText('textTwo'))
             ->should(Condition::visible())
@@ -493,6 +493,25 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->findAll(By::xpath('descendant::div[@data-name="find-all-child"]'))
             ->assert(Condition::size(12))
             ->assert(Condition::withText('find-all-child-0'));
+    }
+
+
+    public function testElementText()
+    {
+        $text = self::$wd->find(By::text('textOne'))
+            ->text();
+        $this->assertInternalType('string', $text, 'String expected for element');
+
+    }
+
+
+    public function testCollectionText()
+    {
+        $text = self::$wd->findAll(By::text('textOne'))
+            ->should(Condition::text("textOne"))
+            ->text();
+        $this->assertInternalType('array', $text, 'Array expected for collection');
+
     }
 
 }

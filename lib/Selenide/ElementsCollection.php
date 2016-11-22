@@ -138,6 +138,24 @@ class ElementsCollection extends SelenideElement
 
 
     /**
+     * Get element list values
+     *
+     * @return string
+     */
+    public function text()
+    {
+        $collection = $this->getCollection();
+        $this->selenide->getReport()->addChildEvent('Read value');
+        $valueList = [];
+        foreach ($collection as $element) {
+            $valueList[] = $element->text();
+        }
+        return $valueList;
+    }
+
+
+
+    /**
      * @return \WebDriver_Element
      * @throws Exception
      */

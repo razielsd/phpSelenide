@@ -171,7 +171,6 @@ class Driver
         foreach ($elementList as $element) {
             try {
                 $locator = $selector->locator->getChildLocator();
-
                 $nodeList = $element->childAll($locator);
                 foreach ($nodeList as $node) {
                     $resultList[] = $node;

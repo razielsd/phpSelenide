@@ -121,10 +121,10 @@ class By
                 $locator = 'name=' . $this->locator;
                 break;
             case self::TYPE_TEXT:
-                $locator = "xpath=//*[text()='" . $this->locator . "']";
+                $locator = "xpath=//*[normalize-space(text())='" . $this->locator . "']";
                 break;
             case self::TYPE_WITH_TEXT:
-                $locator = "xpath=//*[contains(text(), '{$this->locator}')]";
+                $locator = "xpath=//*[contains(normalize-space(text()), '{$this->locator}')]";
                 break;
             case self::TYPE_CSS:
                 $locator = 'css=' . $this->locator;
@@ -154,10 +154,10 @@ class By
                 $locator = 'name=' . $this->locator;
                 break;
             case self::TYPE_TEXT:
-                $locator = "xpath=descendant:://*[text()='" . $this->locator . "']";
+                $locator = "xpath=descendant:://*[normalize-space(text())='" . $this->locator . "']";
                 break;
             case self::TYPE_WITH_TEXT:
-                $locator = "xpath=descendant:://*[contains(text(), '{$this->locator}')]";
+                $locator = "xpath=descendant:://*[contains(normalize-space(text()), '{$this->locator}')]";
                 break;
             case self::TYPE_CSS:
                 $locator = 'css=' . $this->locator;
