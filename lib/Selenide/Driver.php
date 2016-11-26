@@ -96,6 +96,9 @@ class Driver
                 } else {
                     $resultList = $this->searchFromSecondElement($resultList, $selector);
                 }
+                if (count($resultList) == 0) {
+                    throw new Exception_ConditionMatchFailed('Not found elements');
+                }
                 $foundElement = true;
             }
             try {
