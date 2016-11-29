@@ -1,22 +1,206 @@
 <?php
 namespace Selenide;
 
-class ElementsCollection extends SelenideElement
+
+class ElementsCollection
 {
-    public function assert(Condition_Rule $condition)
+    const MODE_SINGLE_ELEMENT = 1;
+    const MODE_COLLECTION_ELEMENT = 2;
+
+    /**
+     * @var Selenide;
+     */
+    protected $selenide = null;
+    /**
+     * @var Driver
+     */
+    protected $driver = null;
+    /**
+     * @var Selector[]
+     */
+    protected $selectorList = [];
+
+    protected $description = '';
+
+
+    public function __construct(Selenide $selenide, array $selectorList)
     {
-        $collection = $this->getCollection();
-        $condition->applyAssert($collection);
+        $this->selenide = $selenide;
+        $this->driver = $selenide->getDriver();
+        $this->selectorList = $selectorList;
+    }
+
+
+    /**
+     * Set element description
+     *
+     * @param $description
+     * @return $this
+     */
+    public function description($description)
+    {
+        $this->description = $description;
         return $this;
     }
 
 
+    /**
+     * Find single element
+     *
+     * @param $locator
+     * @return ElementsCollection
+     */
+    public function find(By $locator)
+    {
+        $selector = new Selector();
+        $selector->locator = $locator;
+        $selector->type = Selector::TYPE_ELEMENT;
+        $this->selectorList[] = $selector;
+        return $this;
+    }
+
+
+    /**
+     * Find elements collection
+     *
+     * @param $locator
+     * @return ElementsCollection
+     */
+    public function findAll(By $locator)
+    {
+        $selector = new Selector();
+        $selector->locator = $locator;
+        $selector->type = Selector::TYPE_COLLECTION;
+        $this->selectorList[] = $selector;
+        return $this;
+    }
+
+
+    /**
+     * Filter by condition
+     *
+     * @param Condition_Rule $condition
+     * @return ElementsCollection
+     */
+    public function should(Condition_Rule $condition)
+    {
+        $selector = new Selector();
+        $selector->condition = $condition;
+        $selector->isPositive = true;
+        $this->selectorList[] = $selector;
+        return $this;
+    }
+
+
+    /**
+     * Filter by Not Condition
+     *
+     * @param Condition_Rule $condition
+     * @return ElementsCollection
+     */
+    public function shouldNot(Condition_Rule $condition)
+    {
+        $selector = new Selector();
+        $selector->condition = $condition;
+        $selector->isPositive = false;
+        $this->selectorList[] = $selector;
+        return $this;
+    }
+
+
+    /**
+     * Assert condition
+     *
+     * @param Condition_Rule $condition
+     * @return $this
+     * @throws Exception_ElementNotFound
+     */
+    public function assert(Condition_Rule $condition)
+    {
+        $collection = $this->getWebdriverCollection();
+        try {
+            $condition->applyAssert($collection);
+        } catch (Exception_ElementNotFound $e) {
+            throw new Exception_ElementNotFound(
+                $this->description .
+                ': Not found element ' . $this->getLocator() . ' with condition ' .
+                $condition->getLocator(),
+                0,
+                $e);
+        }
+
+        return $this;
+    }
+
+
+    /**
+     * Assert not condition
+     *
+     * @param Condition_Rule $condition
+     * @return $this
+     */
     public function assertNot(Condition_Rule $condition)
     {
-        $collection = $this->getCollection();
+        $collection = $this->getWebdriverCollection();
         $condition->applyAssertNegative($collection);
         return $this;
     }
+
+
+    /**
+     * @param int $index
+     * @return SelenideElement
+     * @throws Exception_ElementNotFound
+     */
+    public function get($index = 0)
+    {
+        $collection = $this->getCollectionNotEmpty();
+        if (!isset($collection[$index])) {
+            throw new Exception_ElementNotFound(
+                $this->description . ': Not found element ' . $this->getLocator()
+            );
+        }
+        return $collection[$index];
+    }
+
+
+    public function length()
+    {
+        return count($this->getCollection());
+    }
+
+
+    /**
+     * Set element value
+     *
+     * @param $value
+     * @return $this
+     */
+    public function setValue($value)
+    {
+        $collection = $this->getCollectionNotEmpty();
+        foreach ($collection as $element) {
+            $element->setValue($value);
+        }
+        return $this;
+    }
+
+
+    /**
+     * Press key enter
+     *
+     * @return $this
+     */
+    public function pressEnter()
+    {
+        $collection = $this->getCollectionNotEmpty();
+        foreach ($collection as $element) {
+            $element->pressEnter();
+        }
+        return $this;
+    }
+
+
 
 
     /**
@@ -28,11 +212,10 @@ class ElementsCollection extends SelenideElement
     {
         $collection = $this->getCollection();
         $counter = 0;
-        /** @var \WebDriver_Element $element */
         foreach ($collection as $element) {
             $counter += $element->isDisplayed() ? 1 : 0;
         }
-        return count($collection) == $counter;
+        return ((count($collection) == $counter) && ($counter > 0));
     }
 
 
@@ -43,8 +226,7 @@ class ElementsCollection extends SelenideElement
      */
     public function click()
     {
-        $collection = $this->getCollection();
-        /** @var \WebDriver_Element $element */
+        $collection = $this->getCollectionNotEmpty();
         foreach ($collection as $element) {
             $element->click();
         }
@@ -59,8 +241,7 @@ class ElementsCollection extends SelenideElement
      */
     public function doubleClick()
     {
-        $collection = $this->getCollection();
-        /** @var \WebDriver_Element $element */
+        $collection = $this->getCollectionNotEmpty();
         foreach ($collection as $element) {
             $element->dbclick();
         }
@@ -77,9 +258,8 @@ class ElementsCollection extends SelenideElement
     {
         $collection = $this->getCollection();
         $counter = 0;
-        /** @var \WebDriver_Element $element */
         foreach ($collection as $element) {
-            $counter += $element->isPresent() ? 1 : 0;
+            $counter += $element->exists() ? 1 : 0;
         }
         return (count($collection) == $counter) && ($counter > 0);
     }
@@ -92,9 +272,8 @@ class ElementsCollection extends SelenideElement
      */
     public function checked()
     {
-        $collection = $this->getCollection();
+        $collection = $this->getCollectionNotEmpty();
         $counter = 0;
-        /** @var \WebDriver_Element $element */
         foreach ($collection as $element) {
             $counter += $element->checked() ? 1 : 0;
         }
@@ -109,13 +288,13 @@ class ElementsCollection extends SelenideElement
      */
     public function val()
     {
-        $collection = $this->getCollection();
+        $collection = $this->getCollectionNotEmpty();
         $this->selenide->getReport()->addChildEvent('Read value');
         $valueList = [];
         foreach ($collection as $element) {
-            $valueList[] = $element->value();
+            $valueList[] = $element->val();
         }
-        return $valueList;
+        return $this->sendResult($valueList);
     }
 
 
@@ -127,13 +306,12 @@ class ElementsCollection extends SelenideElement
      */
     public function attribute($name)
     {
-        $collection = $this->getCollection();
+        $collection = $this->getCollectionNotEmpty();
         $attrList = [];
-        /** @var \WebDriver_Element $element */
         foreach ($collection as $element) {
             $attrList[] = $element->attribute($name);
         }
-        return $attrList;
+        return $this->sendResult($attrList);
     }
 
 
@@ -144,22 +322,31 @@ class ElementsCollection extends SelenideElement
      */
     public function text()
     {
-        $collection = $this->getCollection();
+        $collection = $this->getCollectionNotEmpty();
         $this->selenide->getReport()->addChildEvent('Read value');
         $valueList = [];
         foreach ($collection as $element) {
             $valueList[] = $element->text();
         }
-        return $valueList;
+        return $this->sendResult($valueList);
     }
 
 
+    /**
+     * Get path for element
+     *
+     * @return string
+     */
+    public function getLocator()
+    {
+        return Util::selectorAsText($this->selectorList);
+    }
+
 
     /**
-     * @return \WebDriver_Element
-     * @throws Exception
+     * @return \WebDriver_Element[]
      */
-    protected function getCollection()
+    protected function getWebdriverCollection()
     {
         $elementList = $this->driver->search($this->selectorList);
         $stateText = empty($elementList) ?
@@ -167,4 +354,60 @@ class ElementsCollection extends SelenideElement
         $this->selenide->getReport()->addChildEvent($stateText);
         return $elementList;
     }
+
+
+    /**
+     * @return SelenideElement[]
+     */
+    public function getCollection()
+    {
+        $elementList = $this->getWebdriverCollection();
+        $resultList = [];
+        foreach ($elementList as $wdElement) {
+            $resultList[] = new SelenideElement($this->selenide, $wdElement);
+        }
+        return $resultList;
+    }
+
+
+    /**
+     * Alias for getCollection with check for not empty
+     *
+     * @return SelenideElement[]
+     * @throws Exception_ElementNotFound
+     */
+    public function getCollectionNotEmpty()
+    {
+        $collection = $this->getCollection();
+        if (empty($collection)) {
+            throw new Exception_ElementNotFound(
+                $this->description .
+                ': Not found element ' . $this->getLocator()
+            );
+        }
+        return $collection;
+
+    }
+
+
+    protected function sendResult(array $result)
+    {
+        $mode = self::MODE_COLLECTION_ELEMENT;
+        foreach ($this->selectorList as $selector) {
+            switch ($selector->type) {
+                case Selector::TYPE_ELEMENT:
+                    $mode = self::MODE_SINGLE_ELEMENT;
+                    break;
+                case Selector::TYPE_COLLECTION:
+                    $mode = self::MODE_COLLECTION_ELEMENT;
+                    break;
+            }
+        }
+
+        if ($mode != self::MODE_COLLECTION_ELEMENT) {
+            $result = isset($result[0]) ? $result[0] : null;
+        }
+        return $result;
+    }
+
 }

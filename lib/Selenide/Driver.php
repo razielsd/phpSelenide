@@ -59,20 +59,33 @@ class Driver
         $startTime = microtime(true);
         $searchTimeout = 1;
         $isFound = false;
-        while (!$isFound) {
-            try {
-                $resultList = $this->searchBySelectors($selectorList);
-                $isFound = true;
-            } catch (Exception_ConditionMatchFailed $e) {
-                $currentTime = microtime(true);
-                if (($currentTime - $startTime) <= $timeout) {
-                    sleep($searchTimeout);
-                } else {
-                    return [];
+        try {
+            $timeoutObj = $this->webDriver()->timeout();
+            $prevTimeout = $timeoutObj->get($timeoutObj::WAIT_IMPLICIT);
+            $this->webDriver()->timeout()->implicitWait(10);
+            while (!$isFound) {
+                try {
+                    $resultList = $this->searchBySelectors($selectorList);
+                    if (empty($resultList)) {
+                        throw new Exception_ConditionMatchFailed('Not found elements');
+                    }
+                    $isFound = true;
+                } catch (Exception_ConditionMatchFailed $e) {
+                    $currentTime = microtime(true);
+                    if (($currentTime - $startTime) <= $timeout) {
+                        sleep($searchTimeout);
+                    } else {
+                        return [];
+                    }
+                    $this->selenide->getReport()->addChildEvent(
+                        'Received restart from condition: ' . $e->getMessage()
+                    );
                 }
-                $this->selenide->getReport()->addChildEvent(
-                    'Received restart from condition: ' . $e->getMessage()
-                );
+            }
+        } finally {
+            if ($prevTimeout) {
+                //rollback previous settings
+                $this->webDriver()->timeout()->implicitWait($prevTimeout);
             }
         }
         $this->selenide->getReport()->addChildEvent('Found: ' . count($resultList));
@@ -171,7 +184,15 @@ class Driver
         foreach ($elementList as $element) {
             try {
                 $locator = $selector->locator->getChildLocator();
-                $nodeList = $element->childAll($locator);
+                $nodeList = [];
+                if ($selector->type == Selector::TYPE_ELEMENT) {
+                    $element = $element->child($locator);
+                    if ($element) {
+                        $nodeList[] = $element;
+                    }
+                } else {
+                    $nodeList = $element->childAll($locator);
+                }
                 foreach ($nodeList as $node) {
                     $resultList[] = $node;
                 }

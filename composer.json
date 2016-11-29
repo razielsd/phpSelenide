@@ -7,7 +7,7 @@
   "minimum-stability": "stable",
   "require": {
     "phpunit/phpunit": "~5",
-    "razielsd/webdriverlib": "~0.1"
+    "razielsd/webdriverlib": "~0.2"
   },
   "autoload": {
     "psr-0": {

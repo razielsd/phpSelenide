@@ -31,6 +31,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd = new \Selenide\Selenide();
         self::$wd->configuration()->baseUrl = self::$baseUrl;
         self::$wd->connect();
+        self::$wd->getDriver()->webDriver()->timeout()->implicitWait(1);
         self::$wd->open(self::$testUrl);
     }
 
@@ -39,6 +40,37 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         self::$wd->configuration()->timeout = self::$timeout;
+    }
+
+
+    public function testLength_ElementFound()
+    {
+        $this->assertEquals(
+            1,
+            self::$wd->find(By::id('e_textarea'))->length(),
+            'Element must be exists'
+        );
+    }
+
+
+    public function testLength_ElementNotFound()
+    {
+        $this->assertEquals(
+            0,
+            self::$wd->find(By::id('e_textareazz'))->length(),
+            'Element must be not exists'
+        );
+        //self::$wd->findAll(By::css('#ires li.gtest'))
+    }
+
+
+    public function testLength_ElementListFound()
+    {
+        $this->assertEquals(
+            10,
+            self::$wd->findAll(By::css('#ires li.gtest'))->length(),
+            'Element must be not exists'
+        );
     }
 
 
@@ -522,22 +554,63 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testElementText()
+    public function testText_Element_ReturnType()
     {
         $text = self::$wd->find(By::text('textOne'))
             ->text();
-        $this->assertInternalType('string', $text, 'String expected for element');
-
+        $this->assertInternalType('string', $text, 'String expected for first element');
     }
 
 
-    public function testCollectionText()
+    public function testText_Element_DescrReturnType()
+    {
+        $text = self::$wd->find(By::text('textOne'))
+            ->description('Get text for test')
+            ->text();
+        $this->assertInternalType('string', $text, 'String expected for first element');
+    }
+
+
+    public function testText_Collection_ReturnType()
     {
         $text = self::$wd->findAll(By::text('textOne'))
             ->should(Condition::text("textOne"))
             ->text();
         $this->assertInternalType('array', $text, 'Array expected for collection');
 
+    }
+
+
+    public function testAttribute_Element_ReturnType()
+    {
+        $attrValue = self::$wd->find(By::id('checkedBox'))
+            ->attribute('id');
+        $this->assertInternalType('string', $attrValue, 'String expected for first element');
+    }
+
+
+    public function testAttribute_Collection_ReturnType()
+    {
+        $attrValue = self::$wd->findAll(By::id('checkedBox'))
+            ->attribute('id');
+        $this->assertInternalType('array', $attrValue, 'Array expected for collection');
+
+    }
+
+
+    public function testVal_Element_ReturnType()
+    {
+        $value = self::$wd->find(By::tagName('input'))
+            ->val();
+        $this->assertInternalType('string', $value, 'String expected for first element');
+    }
+
+
+    public function testVal_Collection_ReturnType()
+    {
+        $value = self::$wd->findAll(By::tagName('input'))
+            ->val();
+        $this->assertInternalType('array', $value, 'Array expected for collection');
     }
 
 
@@ -558,5 +631,11 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testGet_ByIndex()
+    {
+        $element = self::$wd->findAll(By::tagName('input'))
+            ->get();
+        $this->assertInstanceOf('Selenide\SelenideElement', $element, 'Must be return SelenideElement');
+    }
 
 }

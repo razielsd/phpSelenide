@@ -1,6 +1,7 @@
 # phpSelenide
 
-## Element / Collection
+
+## Collection
 * find(By $locator) - поиск одного элемента
 * findAll(By locator) - поиск множества элементов
 * click() - клик по элементу
@@ -9,7 +10,9 @@
 * isDisplayed() - проверяет, что элемент виден на странице
 * attribute($attrName) - получить значение атрибута элемента
 * val() - получить значение элемента (для input - @value, для select - @value выбранного option)
-
+* get($index) - получить элемент коллекции
+* getCollection() - получить все найденные элементы
+* getCollectionNotEmpty - получить все найденные элементы, с проверкой что хотя бы один элемент найден
 
 ## Condition list
 * size($size)

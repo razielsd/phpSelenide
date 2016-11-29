@@ -34,14 +34,14 @@ class Selenide
      * Find single element
      *
      * @param $locator
-     * @return SelenideElement
+     * @return ElementsCollection
      */
     public function find(By $locator)
     {
         $selector = new Selector();
         $selector->locator = $locator->asString();
         $selector->type = Selector::TYPE_ELEMENT;
-        return new SelenideElement($this, [$selector]);
+        return new ElementsCollection($this, [$selector]);
     }
 
 
@@ -118,11 +118,11 @@ class Selenide
      * Create element with description
      *
      * @param $description
-     * @return SelenideElement
+     * @return ElementsCollection
      */
     public function description($description)
     {
-        $element = new SelenideElement($this, []);
+        $element = new ElementsCollection($this, []);
         $element->description($description);
         return $element;
     }
