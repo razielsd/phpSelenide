@@ -27,3 +27,8 @@
 * visible()
 * checked()
 * child(By $locator)
+
+## ToDo
+* Execute Javascript
+* Get element html source
+* ArrayIterator for ElementsCollection
