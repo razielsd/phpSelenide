@@ -32,3 +32,5 @@
 * Execute Javascript
 * Get element html source
 * ArrayIterator for ElementsCollection
+* Wait()
+* Element locator for assertion error
