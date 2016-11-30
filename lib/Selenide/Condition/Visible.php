@@ -13,10 +13,7 @@ class Condition_Visible extends Condition_Rule
     public function assertCollectionPositive(array $elementList)
     {
         if (empty($elementList)) {
-            \PHPUnit_Framework_Assert::assertTrue(
-                false,
-                'Elements not found for assertion Condition::visible()'
-            );
+            throw new Exception_ElementNotFound('Elements not found for assertion Condition::visible()');
         }
         /** @var \WebDriver_Element $element */
         foreach ($elementList as $index => $element) {
@@ -34,7 +31,6 @@ class Condition_Visible extends Condition_Rule
     {
         if (empty($elementList)) {
             return $this;
-            //throw new Exception_ElementNotFound('Elements not found for assertion');
         }
         /** @var \WebDriver_Element $element */
         foreach ($elementList as $index => $element) {

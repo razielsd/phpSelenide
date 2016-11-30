@@ -196,6 +196,19 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->assertNot(Condition::text("textTwo"));
     }
 
+
+    /**
+     * @expectedException Selenide\Exception_ElementNotFound
+     */
+    public function testConditionText_Empty()
+    {
+        self::$wd
+            ->find(By::xpath("bad locator"))
+            ->should(Condition::visible())
+            ->assert(Condition::text("any text"));
+    }
+
+
     public function testConditionTextCollection()
     {
         self::$wd->findAll(By::text('textOne'))
@@ -226,6 +239,18 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    /**
+     * @expectedException Selenide\Exception_ElementNotFound
+     */
+    public function testConditionWithText_Empty()
+    {
+        self::$wd
+            ->find(By::xpath("bad locator"))
+            ->should(Condition::visible())
+            ->assert(Condition::withText("any text"));
+    }
+
+
     public function testConditionVisible()
     {
         self::$wd->find(By::withText('textTwo'))
@@ -234,13 +259,15 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    /**
+     * @expectedException Selenide\Exception_ElementNotFound
+     */
     public function testConditionVisible_NotExistsElement()
     {
         self::$wd->find(By::id('not-exists-lement'))
             ->should(Condition::visible())
-            ->assert(Condition::size(0));
+            ->assert(Condition::visible());
     }
-
 
 
     public function testConditionVisibleCollection()
@@ -256,16 +283,6 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd->find(By::id('hidden-div'))
             ->shouldNot(Condition::visible())
             ->assertNot(Condition::visible());
-    }
-
-
-    /**
-     * @expectedException PHPUnit_Framework_ExpectationFailedException
-     */
-    public function testVisible_NotFoundElement()
-    {
-        self::$wd->find(By::id('not-found-element'))
-            ->assert(Condition::visible());
     }
 
 
@@ -300,6 +317,17 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->shouldNot(Condition::value('textzzZ'))
             ->assert(Condition::value('textValue'))
             ->assertNot(Condition::value('textzzZ'));
+    }
+
+
+    /**
+     * @expectedException Selenide\Exception_ElementNotFound
+     */
+    public function testConditionValue_Empty()
+    {
+        self::$wd
+            ->find(By::xpath("bad locator"))
+            ->assert(Condition::value("any text"));
     }
 
 

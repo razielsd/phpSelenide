@@ -12,6 +12,9 @@ class Condition_Child extends Condition_Rule
 
     public function assertCollectionPositive(array $elementList)
     {
+        if (empty($elementList)) {
+            throw new Exception_ElementNotFound('Elements not found for assertion');
+        }
         foreach ($elementList as $index => $e) {
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
             \PHPUnit_Framework_Assert::assertTrue(
@@ -25,6 +28,9 @@ class Condition_Child extends Condition_Rule
 
     public function assertCollectionNegative(array $elementList)
     {
+        if (empty($elementList)) {
+            throw new Exception_ElementNotFound('Elements not found for assertion');
+        }
         foreach ($elementList as $index => $e) {
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
             \PHPUnit_Framework_Assert::assertFalse(

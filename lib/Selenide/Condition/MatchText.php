@@ -17,6 +17,9 @@ class Condition_MatchText extends Condition_Rule
 
     public function assertCollectionPositive(array $elementList)
     {
+        if (empty($elementList)) {
+            throw new Exception_ElementNotFound('Elements not found for assertion');
+        }
         foreach ($elementList as $index => $element) {
             $actualText = $this->getActualValue($element);
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
@@ -32,6 +35,9 @@ class Condition_MatchText extends Condition_Rule
 
     public function assertCollectionNegative(array $elementList)
     {
+        if (empty($elementList)) {
+            throw new Exception_ElementNotFound('Elements not found for assertion');
+        }
         foreach ($elementList as $index => $element) {
             $actualText = $this->getActualValue($element);
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
