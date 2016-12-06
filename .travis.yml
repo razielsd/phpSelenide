@@ -1,0 +1,20 @@
+language: php
+
+php:
+  - '7.0'
+
+before_script:
+  - "java -version"
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3
+  - "wget http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar"
+  - "cd ./tests/selenidehtml && nohup php -S 127.0.0.1:10322 > /dev/null 2>&1 &"
+  - "nohup java -jar selenium-server-standalone-2.53.1.jar -port 4444 > /dev/null 2>&1 &"
+  - sleep 10
+
+install:
+  - "composer install"
+
+script:
+  - "./vendor/phpunit/phpunit/phpunit ./tests/SelenideTest.php"
