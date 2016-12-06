@@ -1,5 +1,7 @@
 # phpSelenide
 
+[![Build Status](https://travis-ci.org/Enapiuz/phpSelenide.svg?branch=master)](https://travis-ci.org/Enapiuz/phpSelenide)
+
 
 ## Collection
 * find(By $locator) - поиск одного элемента
