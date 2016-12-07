@@ -3,6 +3,12 @@
 [![Build Status](https://travis-ci.org/Enapiuz/phpSelenide.svg?branch=master)](https://travis-ci.org/Enapiuz/phpSelenide)
 
 
+## How to test
+* composer install
+* make fulltest
+
+Other options you can see in Makefile or run `make`
+
 ## Collection
 * find(By $locator) - поиск одного элемента
 * findAll(By locator) - поиск множества элементов

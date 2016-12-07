@@ -8,7 +8,7 @@ before_script:
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
-  - "wget -O selenium.jar http://selenium-release.storage.googleapis.com/2.53/selenium-server-standalone-2.53.1.jar"
+  - "make downloadselenium"
   - "make startserver"
   - "make startselenium"
   - sleep 10
@@ -17,7 +17,7 @@ install:
   - "composer install"
 
 script:
-  - "make phpunit"
+  - "make test"
 
 after_script:
   - "make stopselenium"
