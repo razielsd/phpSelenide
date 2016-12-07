@@ -2,12 +2,28 @@
 
 [![Build Status](https://travis-ci.org/razielsd/phpSelenide.svg?branch=master)](https://travis-ci.org/razielsd/phpSelenide)
 
+## Install
+Add to composer.json __razielsd/phpselenide__, example:
+```
+{
+    "name": "my project",
+    "description": "Selenide example",
+    "require": {
+        "razielsd/phpselenide": "~0.3"
+    }
+
+```
+Update composer:
+```
+composer install
+```
 
 ## How to test
 * composer install
 * make fulltest
 
 Other options you can see in Makefile or run `make`
+
 
 ## Collection
 * find(By $locator) - поиск одного элемента
