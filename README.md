@@ -1,5 +1,13 @@
 # phpSelenide
 
+[![Build Status](https://travis-ci.org/razielsd/phpSelenide.svg?branch=master)](https://travis-ci.org/razielsd/phpSelenide)
+
+
+## How to test
+* composer install
+* make fulltest
+
+Other options you can see in Makefile or run `make`
 
 ## Collection
 * find(By $locator) - поиск одного элемента

@@ -1,0 +1,24 @@
+language: php
+
+php:
+  - '7.0'
+
+before_script:
+  - "java -version"
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+  - sleep 3
+  - "make downloadselenium"
+  - "make startserver"
+  - "make startselenium"
+  - sleep 10
+
+install:
+  - "composer install"
+
+script:
+  - "make test"
+
+after_script:
+  - "make stopselenium"
+  - "make stopserver"

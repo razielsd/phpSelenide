@@ -17,8 +17,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
      * Url for test page in tests/www/webdrivertest.html
      * @var string
      */
-    protected static $testUrl = '/selenidehtml/';
-    protected static $baseUrl = 'http://devtest.dev';
+    protected static $testUrl = '/';
+    protected static $baseUrl = 'http://127.0.0.1:8000';
 
     protected $backupStaticAttributesBlacklist = array(
         'SelenideTest' => array('wd'),
