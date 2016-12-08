@@ -277,6 +277,13 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->assert(Condition::visible());
     }
 
+    public function testDifficultText()
+    {
+        self::$wd->findAll(By::text('textThree'))
+            ->should(Condition::visible())
+            ->assert(Condition::visible());
+    }
+
 
     public function testVisible_HiddenElement()
     {
