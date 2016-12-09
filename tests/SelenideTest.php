@@ -692,7 +692,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('3', $collection[3]->text());
         $this->assertEquals('4', $collection[4]->text());
 
-        $this->assertFalse(array_key_exists(5, $collection));
+        $this->assertFalse(isset($collection[5]));
     }
 
 
