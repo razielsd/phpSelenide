@@ -673,4 +673,36 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Selenide\SelenideElement', $element, 'Must be return SelenideElement');
     }
 
+
+    public function testCountable_Collection_DynamicSelectors()
+    {
+        $collection = self::$wd->findAll(By::css('.collection-element'));
+        $this->assertCount(5, $collection);
+        $collection->should(Condition::attribute('data-pew', 'exclusive'));
+        $this->assertCount(1, $collection);
+    }
+
+    public function testArrayAccess_Collection_Basic()
+    {
+        $collection = self::$wd->findAll(By::css('.collection-element'));
+
+        $this->assertEquals('0', $collection[0]->text());
+        $this->assertEquals('1', $collection[1]->text());
+        $this->assertEquals('2', $collection[2]->text());
+        $this->assertEquals('3', $collection[3]->text());
+        $this->assertEquals('4', $collection[4]->text());
+
+        $this->assertFalse(array_key_exists(5, $collection));
+    }
+
+
+    public function testArrayAccess_Collection_Foreach()
+    {
+        $collection = self::$wd->findAll(By::css('.collection-element'));
+        $result = '';
+        foreach ($collection as $element) {
+            $result .= $element->text();
+        }
+        $this->assertEquals('01234', $result);
+    }
 }
