@@ -42,6 +42,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
+        self::$wd->getReport()->disable();
         self::$wd->configuration()->timeout = self::$timeout;
     }
 

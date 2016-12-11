@@ -22,7 +22,7 @@ stopselenium:
 	pkill -f "java -jar ./selenium.jar -port 4444"
 
 test:
-	./vendor/phpunit/phpunit/phpunit ./tests/SelenideTest.php
+	./vendor/phpunit/phpunit/phpunit -c phpunit.xml
 
 fulltest:
 	@echo Downloading selenium...
