@@ -19,6 +19,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
      */
     protected static $testUrl = '/';
     protected static $baseUrl = 'http://127.0.0.1:8000';
+    protected static $config = null;
 
     protected $backupStaticAttributesBlacklist = array(
         'SelenideTest' => array('wd'),
@@ -29,7 +30,9 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         parent::setUpBeforeClass();
         self::$wd = new \Selenide\Selenide();
-        self::$wd->configuration()->baseUrl = self::$baseUrl;
+        self::$wd->configuration()->baseUrl = self::config('selenium/baseUrl');;
+        self::$wd->configuration()->host = self::config('selenium/host');
+        self::$wd->configuration()->port = self::config('selenium/port');
         self::$wd->connect();
         self::$wd->getDriver()->webDriver()->timeout()->implicitWait(1);
         self::$wd->open(self::$testUrl);
@@ -40,6 +43,30 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         self::$wd->configuration()->timeout = self::$timeout;
+    }
+
+
+    protected function config($path)
+    {
+        if (self::$config === null) {
+            $configPath = __DIR__ . '/etc/config.php';
+            $devPath = __DIR__ . '/etc/config.dev.php';
+            $config = include ($configPath);
+            if (file_exists($devPath)) {
+                //only top level group replace
+                $devCfg = include ($devPath);
+                foreach ($devCfg as $name => $opts) {
+                    $config[$name] = $opts;
+                }
+            }
+            self::$config = $config;
+        }
+        $path = explode('/', trim($path, '/'));
+        $value = self::$config;
+        foreach ($path as $nodeName) {
+            $value = $value[$nodeName];
+        }
+        return $value;
     }
 
 
@@ -671,6 +698,28 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         $element = self::$wd->findAll(By::tagName('input'))
             ->get();
         $this->assertInstanceOf('Selenide\SelenideElement', $element, 'Must be return SelenideElement');
+    }
+
+
+    public function testExecute_Js_Correct()
+    {
+        $this->assertEquals(
+            8,
+            self::$wd->execute('return 3+5;'),
+            'js must be return number 8'
+        );
+    }
+
+
+    public function testExecute_Js_SingleElement()
+    {
+        $element = self::$wd->find(By::id('testJs'));
+        $element->assert(Condition::size(1));
+        $this->assertEquals(
+            'javascript',
+            $element->execute('return arguments[0].innerHTML;'),
+            'js must be return text "javascript"'
+        );
     }
 
 }

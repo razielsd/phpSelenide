@@ -55,6 +55,6 @@ Other options you can see in Makefile or run `make`
 ## ToDo
 * Execute Javascript
 * Get element html source
-* ArrayIterator for ElementsCollection
 * Wait()
 * Element locator for assertion error
+* iframe/frame support 

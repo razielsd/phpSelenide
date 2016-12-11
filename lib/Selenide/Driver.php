@@ -62,7 +62,7 @@ class Driver
         try {
             $timeoutObj = $this->webDriver()->timeout();
             $prevTimeout = $timeoutObj->get($timeoutObj::WAIT_IMPLICIT);
-            $this->webDriver()->timeout()->implicitWait(10);
+            $this->webDriver()->timeout()->implicitWait(100);
             while (!$isFound) {
                 try {
                     $resultList = $this->searchBySelectors($selectorList);

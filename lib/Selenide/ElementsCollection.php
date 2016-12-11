@@ -333,6 +333,18 @@ class ElementsCollection
 
 
     /**
+     * Execute javascript for elements collection
+     *
+     * @param $script
+     * @return mixed
+     */
+    public function execute($script)
+    {
+        return $this->selenide->execute($script, $this->getCollection());
+    }
+
+
+    /**
      * Get path for element
      *
      * @return string

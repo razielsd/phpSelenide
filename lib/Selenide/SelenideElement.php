@@ -192,8 +192,19 @@ class SelenideElement
         }
         return $element->isDisplayed();
     }
-    
-    
+
+
+    /**
+     * Get WebDriver elementId, can be changed after refresh page or recreate
+     *
+     * @return int
+     */
+    public function getElementId()
+    {
+        return $this->getElement()->getElementId();
+    }
+
+
     
     /**
      * @return \WebDriver_Element
