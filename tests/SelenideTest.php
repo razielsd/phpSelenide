@@ -761,6 +761,12 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     public function testFocus_Iframe_Basic()
     {
         self::$wd
+            ->description('Should not find text in iframe')
+            ->find(By::name('testframe'))
+            ->assert(Condition::visible())
+            ->assertNot(Condition::withText('frame'));
+
+        self::$wd
             ->focus(By::name('testframe'))
             ->description('Searches text in iframe')
             ->find(By::id('frameTxt'))
