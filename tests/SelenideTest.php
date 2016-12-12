@@ -781,22 +781,22 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         self::$wd->focus();
         self::$wd
             ->description('Should find div on main page')
-            ->find(By::id('lower_element'))
-            ->assert(Condition::exists());
+            ->find(By::id('childList'))
+            ->assert(Condition::visible());
         self::$wd
             ->focus(By::name('testframe'))
             ->description('Focus on iframe');
         self::$wd
             ->description('Should not find div in iframe')
-            ->find(By::id('lower_element'))
-            ->assertNot(Condition::exists());
+            ->find(By::id('childList'))
+            ->assertNot(Condition::visible());
         self::$wd
             ->focus()
             ->description('Focus on main page');
         self::$wd
             ->description('Should find div on main page')
-            ->find(By::id('lower_element'))
-            ->assert(Condition::exists());
+            ->find(By::id('childList'))
+            ->assert(Condition::visible());
     }
 
 
