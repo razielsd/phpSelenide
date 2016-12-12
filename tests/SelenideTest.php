@@ -30,7 +30,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     {
         parent::setUpBeforeClass();
         self::$wd = new \Selenide\Selenide();
-        self::$wd->configuration()->baseUrl = self::config('selenium/baseUrl');;
+        self::$wd->configuration()->baseUrl = self::config('selenium/baseUrl');
         self::$wd->configuration()->host = self::config('selenium/host');
         self::$wd->configuration()->port = self::config('selenium/port');
         self::$wd->connect();
@@ -47,7 +47,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    protected function config($path)
+    protected static function config($path)
     {
         if (self::$config === null) {
             $configPath = __DIR__ . '/etc/config.php';
