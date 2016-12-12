@@ -353,6 +353,12 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     }
 
 
+    public function source()
+    {
+        return $this->execute('return arguments[0].outerHTML;');
+    }
+
+
     /**
      * Get path for element
      *

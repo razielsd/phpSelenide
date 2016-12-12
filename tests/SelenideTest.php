@@ -756,4 +756,15 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals('01234', $result, 'Concatenated text must be "01234"');
     }
+
+
+    public function testSource_Get()
+    {
+        $collection = self::$wd->find(By::id('lower_element'));
+        $this->assertEquals(
+            '<div id="lower_element">lower</div>',
+            $collection->source(),
+            'Got wrong element html'
+        );
+    }
 }
