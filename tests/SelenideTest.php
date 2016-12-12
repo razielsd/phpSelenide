@@ -758,40 +758,40 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testIframe_Focus_Basic()
+    public function testIframe_Focus_SearchOnlyInIframe()
     {
-        self::$wd->focus();
+        self::$wd->frame();
         self::$wd
-            ->description('Should not find text in iframe')
+            ->description('Should not find text in iframe while on main page')
             ->find(By::name('testframe'))
             ->assert(Condition::visible())
             ->assertNot(Condition::withText('frame'));
 
         self::$wd
-            ->focus(By::name('testframe'))
-            ->description('Searches text in iframe')
+            ->frame(By::name('testframe'))
+            ->description('Should find text in iframe')
             ->find(By::id('frameTxt'))
             ->assert(Condition::visible())
             ->assert(Condition::text('frame'));
     }
 
 
-    public function testIframe_Focus_Return()
+    public function testIframe_Focus_ReturnFromIframe()
     {
-        self::$wd->focus();
+        self::$wd->frame();
         self::$wd
             ->description('Should find div on main page')
             ->find(By::id('childList'))
             ->assert(Condition::visible());
         self::$wd
-            ->focus(By::name('testframe'))
+            ->frame(By::name('testframe'))
             ->description('Focus on iframe');
         self::$wd
             ->description('Should not find div in iframe')
             ->find(By::id('childList'))
             ->assertNot(Condition::visible());
         self::$wd
-            ->focus()
+            ->frame()
             ->description('Focus on main page');
         self::$wd
             ->description('Should find div on main page')

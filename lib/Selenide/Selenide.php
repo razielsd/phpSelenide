@@ -148,25 +148,23 @@ class Selenide
     }
 
 
-    public function focus(By $selector = null)
+    public function frame(By $selector = null)
     {
-        if (is_null($selector)) {
-            $this
-                ->getDriver()
-                ->webDriver()
-                ->frame()
-                ->focus();
-        } else {
+        if (!is_null($selector)) {
             $element = $this
                 ->getDriver()
                 ->webDriver()
                 ->find($selector->asString());
-            $this
-                ->getDriver()
-                ->webDriver()
-                ->frame()
-                ->focus($element);
+        } else {
+            $element = null;
         }
+
+        $this
+            ->getDriver()
+            ->webDriver()
+            ->frame()
+            ->focus($element);
+
         return $this;
     }
 }
