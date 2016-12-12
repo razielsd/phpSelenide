@@ -677,22 +677,22 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     public function testCountable_Collection_DynamicSelectors()
     {
         $collection = self::$wd->findAll(By::css('.collection-element'));
-        $this->assertCount(5, $collection);
+        $this->assertCount(5, $collection, 'Size of collection must be 5');
         $collection->should(Condition::attribute('data-pew', 'exclusive'));
-        $this->assertCount(1, $collection);
+        $this->assertCount(1, $collection, 'Size of collection must be 1');
     }
 
     public function testArrayAccess_Collection_Basic()
     {
         $collection = self::$wd->findAll(By::css('.collection-element'));
 
-        $this->assertEquals('0', $collection[0]->text());
-        $this->assertEquals('1', $collection[1]->text());
-        $this->assertEquals('2', $collection[2]->text());
-        $this->assertEquals('3', $collection[3]->text());
-        $this->assertEquals('4', $collection[4]->text());
+        $this->assertEquals('0', $collection[0]->text(), 'Text in element must be "0"');
+        $this->assertEquals('1', $collection[1]->text(), 'Text in element must be "1"');
+        $this->assertEquals('2', $collection[2]->text(), 'Text in element must be "2"');
+        $this->assertEquals('3', $collection[3]->text(), 'Text in element must be "3"');
+        $this->assertEquals('4', $collection[4]->text(), 'Text in element must be "4"');
 
-        $this->assertFalse(isset($collection[5]));
+        $this->assertFalse(isset($collection[5]), 'Element with index 5 must not be exist');
     }
 
 
@@ -703,6 +703,6 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         foreach ($collection as $element) {
             $result .= $element->text();
         }
-        $this->assertEquals('01234', $result);
+        $this->assertEquals('01234', $result, 'Concatenated text must be "01234"');
     }
 }
