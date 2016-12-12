@@ -760,10 +760,11 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
     public function testSource_Get()
     {
-        $collection = self::$wd->find(By::id('lower_element'));
+        $collection = self::$wd->find(By::id('elementSourceTest'));
+        $source = $collection->source();
         $this->assertEquals(
-            '<div id="lower_element">lower</div>',
-            $collection->source(),
+            '<div id="elementSourceTest">Hello!</div>',
+            $source,
             'Got wrong element html'
         );
     }
