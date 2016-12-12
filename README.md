@@ -3,6 +3,10 @@
 [![Build Status](https://travis-ci.org/razielsd/phpSelenide.svg?branch=master)](https://travis-ci.org/razielsd/phpSelenide)
 [![Code Climate](https://codeclimate.com/github/razielsd/phpSelenide/badges/gpa.svg)](https://codeclimate.com/github/razielsd/phpSelenide)
 [![Test Coverage](https://codeclimate.com/github/razielsd/phpSelenide/badges/coverage.svg)](https://codeclimate.com/github/razielsd/phpSelenide/coverage)
+[![Latest Stable Version](https://poser.pugx.org/razielsd/phpselenide/v/stable)](https://packagist.org/packages/razielsd/phpselenide)
+[![Total Downloads](https://poser.pugx.org/razielsd/phpselenide/downloads)](https://packagist.org/packages/razielsd/phpselenide)
+[![License](https://poser.pugx.org/razielsd/phpselenide/license)](https://packagist.org/packages/razielsd/phpselenide)
+
 
 ## Install
 Add to composer.json __razielsd/phpselenide__, example:
