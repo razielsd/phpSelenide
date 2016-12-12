@@ -94,6 +94,26 @@ class Selenide
 
 
     /**
+     * Execute javascript
+     *
+     * @param $script - javascript source
+     * @param array $elementList
+     * @return mixed
+     */
+    public function execute($script, array $elementList = [])
+    {
+        $params = [];
+        foreach ($elementList as $element) {
+            $params[]['ELEMENT'] = $element->getElementId();
+        }
+        return $this->getDriver()->webDriver()->execute(
+            $script, $params
+        );
+
+    }
+
+
+    /**
      * @return Report
      */
     public function getReport()

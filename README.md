@@ -1,6 +1,8 @@
 # phpSelenide
 
 [![Build Status](https://travis-ci.org/razielsd/phpSelenide.svg?branch=master)](https://travis-ci.org/razielsd/phpSelenide)
+[![Code Climate](https://codeclimate.com/github/razielsd/phpSelenide/badges/gpa.svg)](https://codeclimate.com/github/razielsd/phpSelenide)
+[![Test Coverage](https://codeclimate.com/github/razielsd/phpSelenide/badges/coverage.svg)](https://codeclimate.com/github/razielsd/phpSelenide/coverage)
 
 ## Install
 Add to composer.json __razielsd/phpselenide__, example:
@@ -55,6 +57,6 @@ Other options you can see in Makefile or run `make`
 ## ToDo
 * Execute Javascript
 * Get element html source
-* ArrayIterator for ElementsCollection
 * Wait()
 * Element locator for assertion error
+* iframe/frame support 
