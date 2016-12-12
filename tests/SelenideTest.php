@@ -760,6 +760,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
     public function testIframe_Focus_Basic()
     {
+        self::$wd->focus();
         self::$wd
             ->description('Should not find text in iframe')
             ->find(By::name('testframe'))
@@ -777,6 +778,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
     public function testIframe_Focus_Return()
     {
+        self::$wd->focus();
         self::$wd
             ->description('Should find div on main page')
             ->find(By::id('lower_element'))
