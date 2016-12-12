@@ -756,4 +756,15 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         }
         $this->assertEquals('01234', $result, 'Concatenated text must be "01234"');
     }
+
+
+    public function testFocus_Iframe_Basic()
+    {
+        self::$wd
+            ->focus(By::name('testframe'))
+            ->description('Searches text in iframe')
+            ->find(By::id('frameTxt'))
+            ->assert(Condition::visible())
+            ->assert(Condition::text('frame'));
+    }
 }

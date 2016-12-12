@@ -147,4 +147,11 @@ class Selenide
         return $element;
     }
 
+
+    public function focus(By $selector)
+    {
+        $element = $this->getDriver()->webDriver()->find($selector->asString());
+        $this->getDriver()->webDriver()->frame()->focus($element);
+        return $this;
+    }
 }
