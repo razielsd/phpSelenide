@@ -1,6 +1,8 @@
 # phpSelenide
 
 [![Build Status](https://travis-ci.org/razielsd/phpSelenide.svg?branch=master)](https://travis-ci.org/razielsd/phpSelenide)
+[![Code Climate](https://codeclimate.com/github/razielsd/phpSelenide/badges/gpa.svg)](https://codeclimate.com/github/razielsd/phpSelenide)
+[![Test Coverage](https://codeclimate.com/github/razielsd/phpSelenide/badges/coverage.svg)](https://codeclimate.com/github/razielsd/phpSelenide/coverage)
 
 ## Install
 Add to composer.json __razielsd/phpselenide__, example:
