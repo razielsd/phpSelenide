@@ -1,8 +1,12 @@
 <?php
+
 namespace Selenide;
 
+use ArrayAccess;
+use Countable;
+use Iterator;
 
-class ElementsCollection
+class ElementsCollection implements Iterator, Countable, ArrayAccess
 {
     const MODE_SINGLE_ELEMENT = 1;
     const MODE_COLLECTION_ELEMENT = 2;
@@ -21,6 +25,11 @@ class ElementsCollection
     protected $selectorList = [];
 
     protected $description = '';
+
+    /**
+     * @var int Current position for Iterator interface.
+     */
+    protected $index = 0;
 
 
     public function __construct(Selenide $selenide, array $selectorList)
@@ -398,7 +407,6 @@ class ElementsCollection
             );
         }
         return $collection;
-
     }
 
 
@@ -422,4 +430,98 @@ class ElementsCollection
         return $result;
     }
 
+
+    /**
+     * @return SelenideElement
+     */
+    public function current(): SelenideElement
+    {
+        return $this->get($this->index);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function next()
+    {
+        $this->index++;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function key()
+    {
+        return $this->index;
+    }
+
+
+    /**
+     * @return boolean
+     */
+    public function valid()
+    {
+        return array_key_exists($this->index, $this->getCollection());
+    }
+
+
+    /**
+     * @return void
+     */
+    public function rewind()
+    {
+        $this->index = 0;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return $this->length();
+    }
+
+
+    /**
+     * @param int $offset
+     * @return boolean
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->getCollection());
+    }
+
+
+    /**
+     * @param int $offset
+     * @return SelenideElement
+     */
+    public function offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+
+    /**
+     * @param mixed $offset
+     * @param mixed $value
+     * @throws Exception_CollectionMethodNotImplemented
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new Exception_CollectionMethodNotImplemented();
+    }
+
+
+    /**
+     * @param mixed $offset
+     * @throws Exception_CollectionMethodNotImplemented
+     */
+    public function offsetUnset($offset)
+    {
+        throw new Exception_CollectionMethodNotImplemented();
+    }
 }
