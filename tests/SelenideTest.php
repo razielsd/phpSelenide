@@ -758,6 +758,17 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testFocus_Iframe_Basic()
+    {
+        self::$wd
+            ->focus(By::name('testframe'))
+            ->description('Searches text in iframe')
+            ->find(By::id('frameTxt'))
+            ->assert(Condition::visible())
+            ->assert(Condition::text('frame'));
+    }
+
+
     public function testSource_Get()
     {
         $collection = self::$wd->find(By::id('elementSourceTest'));
