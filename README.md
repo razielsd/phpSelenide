@@ -49,7 +49,7 @@ Other options you can see in Makefile or run `make`
 * switchTo - переключение контекста
 
 ### switchTo
-* defaultContent - вернуть фокус в основное окно
+* defaultContent() - вернуть фокус в основное окно
 * frame(By $locator) - выбрать фрейм
 
 ## Condition list
