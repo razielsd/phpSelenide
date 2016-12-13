@@ -149,11 +149,11 @@ class Selenide
 
 
     /**
-     * @return Switcher
+     * @return Selenide_Switcher
      */
-    public function switchTo(): Switcher
+    public function switchTo(): Selenide_Switcher
     {
-        $switcher = new Switcher($this);
+        $switcher = new Selenide_Switcher($this);
         return $switcher;
     }
 }

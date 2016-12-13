@@ -2,7 +2,7 @@
 
 namespace Selenide;
 
-class Switcher
+class Selenide_Switcher
 {
 
     /**
