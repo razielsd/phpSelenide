@@ -44,6 +44,13 @@ Other options you can see in Makefile or run `make`
 * get($index) - получить элемент коллекции
 * getCollection() - получить все найденные элементы
 * getCollectionNotEmpty - получить все найденные элементы, с проверкой что хотя бы один элемент найден
+* source() - получить html-код элемента
+* execute($javascript) - выполнить javascript, в параметре arguments(массив) будут элементы коллекции
+* switchTo - переключение контекста
+
+### switchTo
+* defaultContent - вернуть фокус в основное окно
+* frame(By $locator) - выбрать фрейм
 
 ## Condition list
 * size($size)
@@ -60,8 +67,5 @@ Other options you can see in Makefile or run `make`
 * child(By $locator)
 
 ## ToDo
-* Execute Javascript
-* Get element html source
-* Wait()
 * Element locator for assertion error
-* iframe/frame support 
+
