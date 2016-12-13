@@ -147,4 +147,13 @@ class Selenide
         return $element;
     }
 
+
+    /**
+     * @return Selenide_Switcher
+     */
+    public function switchTo(): Selenide_Switcher
+    {
+        $switcher = new Selenide_Switcher($this);
+        return $switcher;
+    }
 }

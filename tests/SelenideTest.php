@@ -758,6 +758,51 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testIframe_Focus_SearchOnlyInIframe()
+    {
+        self::$wd->switchTo();
+        self::$wd
+            ->description('Should not find text in iframe while on main page')
+            ->find(By::name('testframe'))
+            ->assert(Condition::visible())
+            ->assertNot(Condition::withText('frame'));
+
+        self::$wd
+            ->switchTo()
+            ->frame(By::name('testframe'))
+            ->description('Should find text in iframe')
+            ->find(By::id('frameTxt'))
+            ->assert(Condition::visible())
+            ->assert(Condition::text('frame'));
+    }
+
+
+    public function testIframe_Focus_ReturnFromIframe()
+    {
+        self::$wd->switchTo()->defaultContent();
+        self::$wd
+            ->description('Should find div on main page')
+            ->find(By::id('childList'))
+            ->assert(Condition::visible());
+        self::$wd
+            ->switchTo()
+            ->frame(By::name('testframe'))
+            ->description('Focus on iframe');
+        self::$wd
+            ->description('Should not find div in iframe')
+            ->find(By::id('childList'))
+            ->assertNot(Condition::visible());
+        self::$wd
+            ->switchTo()
+            ->defaultContent()
+            ->description('Focus on main page');
+        self::$wd
+            ->description('Should find div on main page')
+            ->find(By::id('childList'))
+            ->assert(Condition::visible());
+    }
+
+
     public function testSource_Get()
     {
         $collection = self::$wd->find(By::id('elementSourceTest'));
