@@ -21,6 +21,7 @@ class Selector
      * Filter element(s) by condition
      */
     const TYPE_CONDITION = 3;
+    const TYPE_WAIT = 4;
 
     protected $data = [
         'isPositive' => true,

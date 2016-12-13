@@ -25,6 +25,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     protected $selectorList = [];
 
     protected $description = '';
+    protected $elementCache = null;
 
     /**
      * @var int Current position for Iterator interface.
@@ -61,6 +62,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
      */
     public function find(By $locator)
     {
+        $this->clearCache();
         $selector = new Selector();
         $selector->locator = $locator;
         $selector->type = Selector::TYPE_ELEMENT;
@@ -77,6 +79,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
      */
     public function findAll(By $locator)
     {
+        $this->clearCache();
         $selector = new Selector();
         $selector->locator = $locator;
         $selector->type = Selector::TYPE_COLLECTION;
@@ -93,6 +96,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
      */
     public function should(Condition_Rule $condition)
     {
+        $this->clearCache();
         $selector = new Selector();
         $selector->condition = $condition;
         $selector->isPositive = true;
@@ -109,6 +113,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
      */
     public function shouldNot(Condition_Rule $condition)
     {
+        $this->clearCache();
         $selector = new Selector();
         $selector->condition = $condition;
         $selector->isPositive = false;
@@ -152,6 +157,24 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     {
         $collection = $this->getWebdriverCollection();
         $condition->applyAssertNegative($collection);
+        return $this;
+    }
+
+
+    public function wait(Condition_Rule $condition, $waitTimeout = null)
+    {
+        $this->clearCache();
+        $selectorList = $this->selectorList;
+        $waitTimeout = $waitTimeout ?? $this->selenide->configuration()->waitTimeout;
+        $this->should($condition);
+        try {
+            $timeout = $this->selenide->configuration()->timeout;
+            $this->selenide->configuration()->timeout = $waitTimeout;
+            $this->getWebdriverCollection();
+        } finally {
+            $this->selenide->configuration()->timeout = $timeout;
+            $this->selectorList = $selectorList;
+        }
         return $this;
     }
 
@@ -208,8 +231,6 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
         }
         return $this;
     }
-
-
 
 
     /**
@@ -375,11 +396,14 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
      */
     protected function getWebdriverCollection()
     {
-        $elementList = $this->driver->search($this->selectorList);
-        $stateText = empty($elementList) ?
-            'Not found elements' : ('Found elements ' . count($elementList));
-        $this->selenide->getReport()->addChildEvent($stateText);
-        return $elementList;
+        if ($this->elementCache === null) {
+            $elementList = $this->driver->search($this->selectorList);
+            $stateText = empty($elementList) ?
+                'Not found elements' : ('Found elements ' . count($elementList));
+            $this->selenide->getReport()->addChildEvent($stateText);
+            $this->elementCache = $elementList;
+        }
+        return $this->elementCache;
     }
 
 
@@ -413,6 +437,12 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
             );
         }
         return $collection;
+    }
+
+
+    protected function clearCache()
+    {
+        $this->elementCache = null;
     }
 
 

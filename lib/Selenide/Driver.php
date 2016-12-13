@@ -93,6 +93,12 @@ class Driver
     }
 
 
+    public function wait(Condition_Rule $condition, $collection)
+    {
+
+    }
+
+
     protected function searchBySelectors(array $selectorList)
     {
         $this->selenide->getReport()

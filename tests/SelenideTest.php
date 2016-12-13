@@ -812,4 +812,19 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             'Got wrong element html'
         );
     }
+
+    public function testWait_Wait_Display()
+    {
+        $element = self::$wd->find(By::id('wait-test'));
+        $this->assertEquals(
+            1,
+            $element->length(),
+            'Not found test element'
+        );
+        $element->execute(
+            "window.setTimeout(function(){document.getElementById('wait-test').style = '';}, 3000);"
+        );
+        $element->wait(Condition::visible());
+
+    }
 }
