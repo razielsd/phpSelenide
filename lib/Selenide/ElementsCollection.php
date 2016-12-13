@@ -293,7 +293,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     /**
      * Get element list values
      *
-     * @return string
+     * @return string|string[]
      */
     public function val()
     {
@@ -311,7 +311,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     /**
      * Get all elements attribute with name
      *
-     * @return array
+     * @return string|string[]
      */
     public function attribute($name)
     {
@@ -327,7 +327,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     /**
      * Get element list values
      *
-     * @return string
+     * @return string|string[]
      */
     public function text()
     {
