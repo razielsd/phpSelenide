@@ -760,7 +760,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
     public function testIframe_Focus_SearchOnlyInIframe()
     {
-        self::$wd->frame();
+        self::$wd->switchTo();
         self::$wd
             ->description('Should not find text in iframe while on main page')
             ->find(By::name('testframe'))
@@ -768,6 +768,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->assertNot(Condition::withText('frame'));
 
         self::$wd
+            ->switchTo()
             ->frame(By::name('testframe'))
             ->description('Should find text in iframe')
             ->find(By::id('frameTxt'))
@@ -778,12 +779,13 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
     public function testIframe_Focus_ReturnFromIframe()
     {
-        self::$wd->frame();
+        self::$wd->switchTo()->defaultContent();
         self::$wd
             ->description('Should find div on main page')
             ->find(By::id('childList'))
             ->assert(Condition::visible());
         self::$wd
+            ->switchTo()
             ->frame(By::name('testframe'))
             ->description('Focus on iframe');
         self::$wd
@@ -791,7 +793,8 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->find(By::id('childList'))
             ->assertNot(Condition::visible());
         self::$wd
-            ->frame()
+            ->switchTo()
+            ->defaultContent()
             ->description('Focus on main page');
         self::$wd
             ->description('Should find div on main page')

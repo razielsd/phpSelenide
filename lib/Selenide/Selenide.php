@@ -148,23 +148,12 @@ class Selenide
     }
 
 
-    public function frame(By $selector = null)
+    /**
+     * @return Switcher
+     */
+    public function switchTo(): Switcher
     {
-        if (!is_null($selector)) {
-            $element = $this
-                ->getDriver()
-                ->webDriver()
-                ->find($selector->asString());
-        } else {
-            $element = null;
-        }
-
-        $this
-            ->getDriver()
-            ->webDriver()
-            ->frame()
-            ->focus($element);
-
-        return $this;
+        $switcher = new Switcher($this);
+        return $switcher;
     }
 }
