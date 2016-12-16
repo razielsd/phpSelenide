@@ -237,6 +237,29 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testConditionText_Quotes()
+    {
+        self::$wd
+            ->find(By::text('"""'))
+            ->assert(Condition::visible());
+        self::$wd
+            ->find(By::text("'''"))
+            ->assert(Condition::visible());
+        self::$wd
+            ->find(By::text('"quoted\'text\'with\'quotes\'1"'))
+            ->assert(Condition::visible());
+        self::$wd
+            ->find(By::text('\'quoted"text"with"quotes"2\''))
+            ->assert(Condition::visible());
+        self::$wd
+            ->find(By::text('normal "quoted" text 1'))
+            ->assert(Condition::visible());
+        self::$wd
+            ->find(By::text('normal \'quoted\' text 2'))
+            ->assert(Condition::visible());
+    }
+
+
     public function testConditionTextCollection()
     {
         self::$wd->findAll(By::text('textOne'))
