@@ -93,12 +93,6 @@ class Driver
     }
 
 
-    public function wait(Condition_Rule $condition, $collection)
-    {
-
-    }
-
-
     protected function searchBySelectors(array $selectorList)
     {
         $this->selenide->getReport()
@@ -142,9 +136,6 @@ class Driver
         try {
             switch ($selector->type) {
                 case Selector::TYPE_ELEMENT:
-                    $element = $this->webDriver()->find($selector->locator);
-                    $resultList = [$element];
-                    break;
                 case Selector::TYPE_COLLECTION:
                     $resultList = $this->webDriver()->findAll($selector->locator);
                     break;

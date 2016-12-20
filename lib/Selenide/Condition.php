@@ -9,7 +9,7 @@ class Condition
      * @param $size
      * @return Condition_Size
      */
-    public static function size($size)
+    public static function size(int $size)
     {
         return new Condition_Size($size);
     }
@@ -21,7 +21,7 @@ class Condition
      * @param $size
      * @return Condition_SizeGreaterThen
      */
-    public static function sizeGreaterThen($size)
+    public static function sizeGreaterThen(int $size)
     {
         return new Condition_SizeGreaterThen($size);
     }
@@ -33,7 +33,7 @@ class Condition
      * @param $size
      * @return Condition_SizeGreaterThenOrEqual
      */
-    public static function sizeGreaterThenOrEqual($size)
+    public static function sizeGreaterThenOrEqual(int $size)
     {
         return new Condition_SizeGreaterThenOrEqual($size);
     }
@@ -45,7 +45,7 @@ class Condition
      * @param $size
      * @return Condition_SizeLessThen
      */
-    public static function sizeLessThen($size)
+    public static function sizeLessThen(int $size)
     {
         return new Condition_SizeLessThen($size);
     }
@@ -57,7 +57,7 @@ class Condition
      * @param $size
      * @return Condition_SizeLessThenOrEqual
      */
-    public static function sizeLessThenOrEqual($size)
+    public static function sizeLessThenOrEqual(int $size)
     {
         return new Condition_SizeLessThenOrEqual($size);
     }
@@ -69,7 +69,7 @@ class Condition
      * @param $value
      * @return Condition_Value
      */
-    public static function value($value)
+    public static function value(string $value)
     {
         return new Condition_Value($value);
     }
@@ -82,7 +82,7 @@ class Condition
      * @param $text
      * @return Condition_Text
      */
-    public static function text($text)
+    public static function text(string $text)
     {
         return new Condition_Text($text);
     }
@@ -93,7 +93,7 @@ class Condition
      * @param $text
      * @return Condition_WithText
      */
-    public static function withText($text)
+    public static function withText(string $text)
     {
         return new Condition_WithText($text);
     }
@@ -144,7 +144,7 @@ class Condition
     }
 
 
-    public static function attribute($attrName, $value)
+    public static function attribute(string $attrName, string $value)
     {
         return new Condition_Attribute($attrName, $value);
     }
@@ -168,7 +168,7 @@ class Condition
      * @param string $regExp
      * @return Condition_MatchText
      */
-    public static function matchText($regExp)
+    public static function matchText(string $regExp)
     {
         return new Condition_MatchText($regExp);
     }
