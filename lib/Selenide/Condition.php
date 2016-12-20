@@ -133,6 +133,17 @@ class Condition
     }
 
 
+    /**
+     * Check element enabled
+     *
+     * @return Condition_Enabled
+     */
+    public static function enabled()
+    {
+        return new Condition_Enabled(null);
+    }
+
+
     public static function attribute($attrName, $value)
     {
         return new Condition_Attribute($attrName, $value);
