@@ -122,13 +122,13 @@ class By
                 break;
             case self::TYPE_TEXT:
                 $locator =
-                    "xpath=//*[normalize-space(.)='" . $this->locator .
-                    "' and not(.//*[normalize-space(.)='" . $this->locator . "'])]";
+                    'xpath=//*[normalize-space(.)=' . Util::escapeString($this->locator) .
+                    ' and not(.//*[normalize-space(.)=' . Util::escapeString($this->locator) . '])]';
                 break;
             case self::TYPE_WITH_TEXT:
                 $locator =
-                    "xpath=//*[contains(normalize-space(.), '" . $this->locator .
-                    "') and not(.//*[contains(normalize-space(.), '" . $this->locator . "')])]";
+                    'xpath=//*[contains(normalize-space(.), ' . Util::escapeString($this->locator) .
+                    ') and not(.//*[contains(normalize-space(.), ' . Util::escapeString($this->locator) . ')])]';
                 break;
             case self::TYPE_CSS:
                 $locator = 'css=' . $this->locator;
@@ -143,7 +143,7 @@ class By
                 $locator = 'tag=' . $this->locator;
                 break;
             case self::TYPE_TITLE:
-                $locator = 'xpath=//*[@title="{$this->locator}"]';
+                $locator = 'xpath=//*[@title=' . Util::escapeString($this->locator) . ']';
                 break;
         }
         return $locator;
@@ -159,13 +159,13 @@ class By
                 break;
             case self::TYPE_TEXT:
                 $locator =
-                    "xpath=descendant::*[normalize-space(.)='" . $this->locator .
-                    "' and not(.//*[normalize-space(.)='" . $this->locator . "'])]";
+                    'xpath=descendant::*[normalize-space(.)=' . Util::escapeString($this->locator) .
+                    ' and not(.//*[normalize-space(.)=' . Util::escapeString($this->locator) . '])]';
                 break;
             case self::TYPE_WITH_TEXT:
                 $locator =
-                    "xpath=descendant::*[contains(normalize-space(.), '" . $this->locator .
-                    "') and not(.//*[contains(normalize-space(.), '" . $this->locator . "')])]";
+                    'xpath=descendant::*[contains(normalize-space(.), ' . Util::escapeString($this->locator) .
+                    ') and not(.//*[contains(normalize-space(.), ' . Util::escapeString($this->locator) . ')])]';
                 break;
             case self::TYPE_CSS:
                 $locator = 'css=' . $this->locator;
@@ -180,7 +180,7 @@ class By
                 $locator = 'tag=' . $this->locator;
                 break;
             case self::TYPE_TITLE:
-                $locator = 'xpath=descendant::*[@title="{$this->locator}"]';
+                $locator = 'xpath=descendant::*[@title=' . Util::escapeString($this->locator) . ']';
                 break;
         }
         return $locator;
