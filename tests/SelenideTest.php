@@ -487,6 +487,19 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             ->assertNot(Condition::checked());
     }
 
+    public function testConditionEnabled_Enabled()
+    {
+        self::$wd->find(By::id('el_enabled'))
+            ->should(Condition::enabled())
+            ->assert(Condition::enabled());
+    }
+
+    public function testConditionEnabled_Disabled()
+    {
+        self::$wd->find(By::id('el_disabled'))
+            ->shouldNot(Condition::enabled())
+            ->assertNot(Condition::enabled());
+    }
 
     public function testConditionAttribute()
     {

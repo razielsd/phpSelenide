@@ -64,6 +64,7 @@ Other options you can see in Makefile or run `make`
 * attribute($attrName, $value)
 * visible()
 * checked()
+* enabled()
 * child(By $locator)
 
 ## ToDo
