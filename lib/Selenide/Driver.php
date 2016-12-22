@@ -104,6 +104,7 @@ class Driver
             $currentSelector[] = $selector;
             $foundElement = false;
             while (!$foundElement) {
+                $this->webDriver()->timeout()->implicitWait(1);
                 if ($index == 0) {
                     $resultList = $this->searchFirstElement($selector);
                 } else {
