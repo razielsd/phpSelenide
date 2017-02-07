@@ -165,6 +165,18 @@ class SelenideTest extends PHPUnit_Framework_TestCase
     }
 
 
+    public function testFind_GetFirstElement()
+    {
+        $message = 'find-all-child-01';
+        $e = self::$wd
+            ->find(By::xpath('//div[@data-name="find-all-child"]'));
+        $this->assertEquals($message, $e->get(0)->text(), 'Must be found first element');
+        $this->assertEquals($message, $e->text(), 'Must be found first element[2]');
+        $e->assert(Condition::Text($message));
+    }
+
+
+
     public function testSize()
     {
         self::$wd->findAll(By::css('#ires li.gtest'))
@@ -861,6 +873,5 @@ class SelenideTest extends PHPUnit_Framework_TestCase
             "window.setTimeout(function(){document.getElementById('wait-test').style = '';}, 3000);"
         );
         $element->wait(Condition::visible());
-
     }
 }

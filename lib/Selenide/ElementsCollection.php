@@ -132,6 +132,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     public function assert(Condition_Rule $condition)
     {
         $collection = $this->getWebdriverCollection();
+        $collection = $this->prepareResult($collection, true);
         try {
             $condition->applyAssert($collection);
         } catch (Exception_ElementNotFound $e) {
@@ -156,6 +157,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     public function assertNot(Condition_Rule $condition)
     {
         $collection = $this->getWebdriverCollection();
+        $collection = $this->prepareResult($collection, true);
         $condition->applyAssertNegative($collection);
         return $this;
     }
@@ -324,7 +326,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
         foreach ($collection as $element) {
             $valueList[] = $element->val();
         }
-        return $this->sendResult($valueList);
+        return $this->prepareResult($valueList);
     }
 
 
@@ -341,7 +343,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
         foreach ($collection as $element) {
             $attrList[] = $element->attribute($name);
         }
-        return $this->sendResult($attrList);
+        return $this->prepareResult($attrList);
     }
 
 
@@ -358,7 +360,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
         foreach ($collection as $element) {
             $valueList[] = $element->text();
         }
-        return $this->sendResult($valueList);
+        return $this->prepareResult($valueList);
     }
 
 
@@ -446,7 +448,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     }
 
 
-    protected function sendResult(array $result)
+    protected function prepareResult(array $result, $asArray = false)
     {
         $mode = self::MODE_COLLECTION_ELEMENT;
         foreach ($this->selectorList as $selector) {
@@ -462,6 +464,9 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
 
         if ($mode != self::MODE_COLLECTION_ELEMENT) {
             $result = isset($result[0]) ? $result[0] : null;
+            if ($asArray) {
+                $result = $result ? [$result] : [];
+            }
         }
         return $result;
     }
