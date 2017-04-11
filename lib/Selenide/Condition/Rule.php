@@ -12,6 +12,16 @@ abstract class Condition_Rule
         $this->expected = $expected;
     }
 
+
+    /**
+     * Get expected value
+     */
+    public function getExpected()
+    {
+        return $this->expected;
+    }
+
+
     /**
      * Get Condition name
      *
