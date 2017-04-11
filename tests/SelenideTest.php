@@ -874,4 +874,21 @@ class SelenideTest extends PHPUnit_Framework_TestCase
         );
         $element->wait(Condition::visible());
     }
+
+
+    /**
+     * @expectedException Selenide\Exception
+     */
+    public function testWait_NotWait_Exception()
+    {
+        self::$wd->find(By::id('not_found_element'))->wait(Condition::visible(), 3);
+    }
+
+
+    public function testClick_OneOf_SingleClick()
+    {
+        self::$wd->find(By::xpath('//input[@data-name="OneOfSingleClick"]'))->click();
+        self::$wd->find(By::id('OneOfSingleClick_1'))->assert(Condition::text('Clicked'));
+        self::$wd->find(By::id('OneOfSingleClick_2'))->assert(Condition::text('NotClicked'));
+    }
 }

@@ -22,6 +22,17 @@ class Selenide
      */
     protected $host = '';
 
+
+    protected $listenerCollection = null;
+    protected $description = '';
+
+
+    public function __construct()
+    {
+        $this->listenerCollection = new ListenerCollection();
+    }
+
+
     public function connect()
     {
         $this->driver = new Driver($this);
@@ -41,7 +52,10 @@ class Selenide
         $selector = new Selector();
         $selector->locator = $locator->asString();
         $selector->type = Selector::TYPE_ELEMENT;
-        return new ElementsCollection($this, [$selector]);
+        $collection = new ElementsCollection($this, [$selector]);
+        $collection->description($this->description);
+        $this->description = '';
+        return $collection;
     }
 
 
@@ -56,7 +70,11 @@ class Selenide
         $selector = new Selector();
         $selector->locator = $locator->asString();
         $selector->type = Selector::TYPE_COLLECTION;
-        return new ElementsCollection($this, [$selector]);
+        $collection = new ElementsCollection($this, [$selector]);
+        $collection->description($this->description);
+        $this->description = '';
+        return $collection;
+
     }
 
 
@@ -138,13 +156,13 @@ class Selenide
      * Create element with description
      *
      * @param $description
-     * @return ElementsCollection
+     * @return Selenide
      */
-    public function description($description)
+    public function description(string $description)
     {
-        $element = new ElementsCollection($this, []);
-        $element->description($description);
-        return $element;
+        $this->getListener()->beforeSetDescription($description);
+        $this->description = $description;
+        return $this;
     }
 
 
@@ -155,5 +173,25 @@ class Selenide
     {
         $switcher = new Selenide_Switcher($this);
         return $switcher;
+    }
+
+
+    /**
+     * @param Listener $listener
+     * @return $this
+     */
+    public function addListener(Listener $listener)
+    {
+        $this->listenerCollection->addListener($listener);
+        return $this;
+    }
+
+
+    /**
+     * @return ListenerCollection
+     */
+    public function getListener()
+    {
+        return $this->listenerCollection;
     }
 }

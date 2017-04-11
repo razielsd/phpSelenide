@@ -52,6 +52,12 @@
 <h2>Wait test</h2>
 <div id="wait-test" style="display: none;">testWait</div>
 <hr />
+<h1>testClick_OneOf_SingleClick</h1>
+    <input type="button" data-name="OneOfSingleClick" onclick="$('#OneOfSingleClick_1').html('Clicked');" value="Click here">
+    <div id="OneOfSingleClick_1">NotClicked</div>
+    <input type="button" data-name="OneOfSingleClick" onclick="$('#OneOfSingleClick_2').html('Clicked2');" value="Click here">
+    <div id="OneOfSingleClick_2">NotClicked</div>
+<hr>
 <h1>Find All -> Find All</h1>
     <div data-name="find-all">
         <div>

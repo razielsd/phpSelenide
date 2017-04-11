@@ -133,6 +133,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     {
         $collection = $this->getWebdriverCollection();
         $collection = $this->prepareResult($collection, true);
+        $this->selenide->getListener()->beforeAssert($condition, $this->getLocator());
         try {
             $condition->applyAssert($collection);
         } catch (Exception_ElementNotFound $e) {
@@ -158,6 +159,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     {
         $collection = $this->getWebdriverCollection();
         $collection = $this->prepareResult($collection, true);
+        $this->selenide->getListener()->beforeAssertNot($condition, $this->getLocator());
         $condition->applyAssertNegative($collection);
         return $this;
     }
@@ -172,7 +174,12 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
         try {
             $timeout = $this->selenide->configuration()->timeout;
             $this->selenide->configuration()->timeout = $waitTimeout;
-            $this->getWebdriverCollection();
+            $collection = $this->getWebdriverCollection();
+            if (count($collection) === 0) {
+                throw new Exception(
+                    'Unable wait condition: ' . $condition->getName() . 'for ' . $this->getLocator()
+                );
+            }
         } finally {
             $this->selenide->configuration()->timeout = $timeout;
             $this->selectorList = $selectorList;
@@ -213,7 +220,13 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     public function setValue($value)
     {
         $collection = $this->getCollectionNotEmpty();
-        foreach ($collection as $element) {
+        foreach ($collection as $idx => $element) {
+            $this->selenide->getListener()->beforeSetValue(
+                $element,
+                $value,
+                $this->getLocator().'[' . $idx . ']',
+                $this->description
+            );
             $element->setValue($value);
         }
         return $this;
@@ -259,7 +272,12 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     public function click()
     {
         $collection = $this->getCollectionNotEmpty();
-        foreach ($collection as $element) {
+        foreach ($collection as $idx => $element) {
+            $this->selenide->getListener()->beforeClick(
+                $element,
+                $this->getLocator().'[' . $idx . ']',
+                $this->description
+            );
             $element->click();
         }
         return $this;
@@ -432,6 +450,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     public function getCollectionNotEmpty()
     {
         $collection = $this->getCollection();
+        $collection = $this->prepareResult($collection, true);
         if (empty($collection)) {
             throw new Exception_ElementNotFound(
                 $this->description .
