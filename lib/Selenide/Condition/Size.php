@@ -1,9 +1,14 @@
 <?php
+
 namespace Selenide;
+
+use PHPUnit\Framework\Assert;
 
 class Condition_Size extends Condition_Rule
     implements Condition_Interface_assertCollection, Condition_Interface_ExpectedCollection
 {
+
+
     public function matchCollection(array $collection): bool
     {
         return $this->expected == count($collection);
@@ -13,7 +18,7 @@ class Condition_Size extends Condition_Rule
     public function assertCollectionPositive(array $elementList)
     {
         $actualSize = count($elementList);
-        \PHPUnit_Framework_Assert::assertEquals(
+        Assert::assertEquals(
             $this->expected,
             $actualSize,
             'Size must be equal ' . $this->expected . ', actual - ' . $actualSize
@@ -25,7 +30,7 @@ class Condition_Size extends Condition_Rule
     public function assertCollectionNegative(array $elementList)
     {
         $actualSize = count($elementList);
-        \PHPUnit_Framework_Assert::assertNotEquals(
+        Assert::assertNotEquals(
             $this->expected,
             $actualSize,
             'Size must be NOT equal ' . $this->expected . ', actual - ' . $actualSize

@@ -3,11 +3,10 @@
 require_once (__DIR__ . '/../lib/bootstrap.php');
 require_once (__DIR__ . '/lib/TestListener.php');
 
-
+use PHPUnit\Framework\TestCase;
 use Selenide\By, Selenide\Condition, Selenide\Selenide;
 
-
-class ListenerTest extends PHPUnit_Framework_TestCase
+class ListenerTest extends TestCase
 {
 
     /**
@@ -171,5 +170,4 @@ class ListenerTest extends PHPUnit_Framework_TestCase
         );
         $this->assertGreaterThan(10, strlen($event['locator']), 'Locator too short');
     }
-
 }

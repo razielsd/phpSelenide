@@ -1,9 +1,13 @@
 <?php
+
 namespace Selenide;
+
+use PHPUnit\Framework\Assert;
 
 class Condition_Value extends Condition_Rule
     implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
+
 
     public function matchElement(\WebDriver_Element $element): bool
     {
@@ -19,7 +23,7 @@ class Condition_Value extends Condition_Rule
         }
         foreach ($elementList as $index => $e) {
             $actual = $this->getActualValue($e);
-            \PHPUnit_Framework_Assert::assertEquals(
+            Assert::assertEquals(
                 $this->expected,
                 $actual,
                 'Value must be equal ' . $this->expected . ', actual - ' . $actual
@@ -36,7 +40,7 @@ class Condition_Value extends Condition_Rule
         }
         foreach ($elementList as $index => $e) {
             $actual = $this->getActualValue($e);
-            \PHPUnit_Framework_Assert::assertNotEquals(
+            Assert::assertNotEquals(
                 $this->expected,
                 $actual,
                 'Value must be equal ' . $this->expected . ', actual - ' . $actual

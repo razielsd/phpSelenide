@@ -1,10 +1,15 @@
 <?php
+
 namespace Selenide;
+
+use PHPUnit\Framework\Assert;
 
 class Condition_Attribute extends Condition_Rule
     implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
+
     protected $attrName = '';
+
 
     public function __construct($attrName, $expected)
     {
@@ -40,11 +45,11 @@ class Condition_Attribute extends Condition_Rule
             $actualValue = $this->getActualValue($e);
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
 
-            \PHPUnit_Framework_Assert::assertNotNull(
+            Assert::assertNotNull(
                 $actualValue, $prefix . 'Not found attribute: ' . $this->attrName
             );
 
-            \PHPUnit_Framework_Assert::assertEquals(
+            Assert::assertEquals(
                 $this->expected,
                 $actualValue,
                 $prefix . 'Not found attribute: ' . $this->attrName . ' with value ' .
@@ -63,10 +68,10 @@ class Condition_Attribute extends Condition_Rule
         foreach ($elementList as $index => $e) {
             $actualValue = $this->getActualValue($e);
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
-            \PHPUnit_Framework_Assert::assertNotNull(
+            Assert::assertNotNull(
                 $actualValue, $prefix . 'Not found attribute: ' . $this->attrName
             );
-            \PHPUnit_Framework_Assert::assertNotEquals(
+            Assert::assertNotEquals(
                 $this->expected,
                 $actualValue,
                 $prefix . 'Found attribute: ' . $this->attrName . ' with value ' .
@@ -82,5 +87,4 @@ class Condition_Attribute extends Condition_Rule
     {
         return $element->attribute($this->attrName);
     }
-
 }
