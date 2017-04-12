@@ -15,7 +15,7 @@ before_script:
   - sleep 10
 
 install:
-  - "composer install --dev"
+  - "composer install"
 
 script:
   - "make test"
