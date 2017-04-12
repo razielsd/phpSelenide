@@ -1,13 +1,19 @@
 <?php
+
 namespace Selenide;
+
+use PHPUnit\Framework\Assert;
+use PHPUnit\Util\RegularExpression;
 
 class Condition_MatchText extends Condition_Rule
     implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
+
+
     public function matchElement(\WebDriver_Element $element): bool
     {
         $actualText = $this->getActualValue($element);
-        $state = \PHPUnit_Util_Regex::pregMatchSafe($this->expected, $actualText);
+        $state = RegularExpression::safeMatch($this->expected, $actualText);
         if ($state === false) {
             throw new Exception_ConditionMatchError('Match error with regexp: ' . $this->expected);
         }
@@ -23,7 +29,7 @@ class Condition_MatchText extends Condition_Rule
         foreach ($elementList as $index => $element) {
             $actualText = $this->getActualValue($element);
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
-            \PHPUnit_Framework_Assert::assertRegExp(
+            Assert::assertRegExp(
                 $this->expected,
                 $actualText,
                 $prefix . 'Text not matched regexp: ' . $this->expected . '. Actual: ' . $actualText
@@ -41,7 +47,7 @@ class Condition_MatchText extends Condition_Rule
         foreach ($elementList as $index => $element) {
             $actualText = $this->getActualValue($element);
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
-            \PHPUnit_Framework_Assert::assertNotRegExp(
+            Assert::assertNotRegExp(
                 $this->expected,
                 $actualText,
                 $prefix . 'Text  matched regexp: ' . $this->expected . '. Actual: ' . $actualText
@@ -55,5 +61,4 @@ class Condition_MatchText extends Condition_Rule
     {
         return $element->text();
     }
-
 }

@@ -1,9 +1,14 @@
 <?php
+
 namespace Selenide;
+
+use PHPUnit\Framework\Assert;
 
 class Condition_Text extends Condition_Rule
     implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
+
+
     public function matchElement(\WebDriver_Element $element): bool
     {
         $actualText = $element->text();
@@ -19,7 +24,7 @@ class Condition_Text extends Condition_Rule
         foreach ($elementList as $index => $e) {
             $actualText = $e->text();
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
-            \PHPUnit_Framework_Assert::assertEquals(
+            Assert::assertEquals(
                 $this->expected,
                 $actualText,
                 $prefix . 'Not found text: ' . $this->expected . '. Actual: ' . $actualText
@@ -37,7 +42,7 @@ class Condition_Text extends Condition_Rule
         foreach ($elementList as $index => $e) {
             $actualText = $e->text();
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
-            \PHPUnit_Framework_Assert::assertNotEquals(
+            Assert::assertNotEquals(
                 $this->expected,
                 $actualText,
                 $prefix . 'Found text: ' . $this->expected . '. Actual: ' . $actualText
@@ -45,5 +50,4 @@ class Condition_Text extends Condition_Rule
         }
         return $this;
     }
-
 }

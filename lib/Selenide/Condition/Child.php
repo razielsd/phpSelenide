@@ -1,9 +1,14 @@
 <?php
+
 namespace Selenide;
+
+use PHPUnit\Framework\Assert;
 
 class Condition_Child extends Condition_Rule
     implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
+
+
     public function matchElement(\WebDriver_Element $element): bool
     {
         return $this->getActualValue($element);
@@ -17,7 +22,7 @@ class Condition_Child extends Condition_Rule
         }
         foreach ($elementList as $index => $e) {
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
-            \PHPUnit_Framework_Assert::assertTrue(
+            Assert::assertTrue(
                 $this->getActualValue($e),
                 $prefix . 'Not found child element: ' . $this->expected->asString()
             );
@@ -33,7 +38,7 @@ class Condition_Child extends Condition_Rule
         }
         foreach ($elementList as $index => $e) {
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
-            \PHPUnit_Framework_Assert::assertFalse(
+            Assert::assertFalse(
                 $this->getActualValue($e),
                 $prefix . 'Found child element: ' . $this->expected->asString()
             );
@@ -46,5 +51,4 @@ class Condition_Child extends Condition_Rule
     {
         return $element->child($this->expected->asString())->isPresent();
     }
-
 }

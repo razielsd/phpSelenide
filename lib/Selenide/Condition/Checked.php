@@ -1,9 +1,14 @@
 <?php
+
 namespace Selenide;
+
+use PHPUnit\Framework\Assert;
 
 class Condition_Checked extends Condition_Rule
     implements Condition_Interface_Match, Condition_Interface_assertCollection
 {
+
+
     public function matchElement(\WebDriver_Element $element): bool
     {
         return $element->checked();
@@ -18,7 +23,7 @@ class Condition_Checked extends Condition_Rule
         /** @var \WebDriver_Element $element */
         foreach ($elementList as $index => $element) {
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
-            \PHPUnit_Framework_Assert::assertTrue(
+            Assert::assertTrue(
                 $element->checked(),
                 $prefix . 'Element is not checked'
             );
@@ -35,12 +40,11 @@ class Condition_Checked extends Condition_Rule
         /** @var \WebDriver_Element $element */
         foreach ($elementList as $index => $element) {
             $prefix = (count($elementList) > 1) ? ('Element[' . $index . ']: ') : '';
-            \PHPUnit_Framework_Assert::assertFalse(
+            Assert::assertFalse(
                 $element->checked(),
                 $prefix . 'Element is checked'
             );
         }
         return $this;
     }
-
 }

@@ -6,7 +6,7 @@
   "keywords": ["selenium","selenide"],
   "minimum-stability": "stable",
   "require": {
-    "phpunit/phpunit": "~5",
+    "phpunit/phpunit": "~6.1",
     "razielsd/webdriverlib": "~0.2"
   },
   "require-dev": {

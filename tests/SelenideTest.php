@@ -2,10 +2,10 @@
 
 require_once (__DIR__ . '/../lib/bootstrap.php');
 
+use PHPUnit\Framework\TestCase;
 use Selenide\By, Selenide\Condition, Selenide\Selenide;
 
-
-class SelenideTest extends PHPUnit_Framework_TestCase
+class SelenideTest extends TestCase
 {
 
     /**
@@ -109,7 +109,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException Selenide\Exception_ElementNotFound
+     * @expectedException \Selenide\Exception_ElementNotFound
      */
     public function testElementNotFound()
     {
@@ -238,7 +238,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException Selenide\Exception_ElementNotFound
+     * @expectedException \Selenide\Exception_ElementNotFound
      */
     public function testConditionText_Empty()
     {
@@ -303,7 +303,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException Selenide\Exception_ElementNotFound
+     * @expectedException \Selenide\Exception_ElementNotFound
      */
     public function testConditionWithText_Empty()
     {
@@ -323,7 +323,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException Selenide\Exception_ElementNotFound
+     * @expectedException \Selenide\Exception_ElementNotFound
      */
     public function testConditionVisible_NotExistsElement()
     {
@@ -391,7 +391,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException Selenide\Exception_ElementNotFound
+     * @expectedException \Selenide\Exception_ElementNotFound
      */
     public function testConditionValue_Empty()
     {
@@ -877,7 +877,7 @@ class SelenideTest extends PHPUnit_Framework_TestCase
 
 
     /**
-     * @expectedException Selenide\Exception
+     * @expectedException \Selenide\Exception
      */
     public function testWait_NotWait_Exception()
     {
