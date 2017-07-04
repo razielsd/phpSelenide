@@ -104,7 +104,10 @@ class SelenideTest extends TestCase
 
     public function testPressEnter()
     {
-        self::$wd->find(By::id('e_textarea'))->setValue('Корыто')->pressEnter();
+        self::$wd->find(By::id('e_textarea'))
+            ->setValue('Корыто')
+            ->assert(Condition::size(1))
+            ->pressEnter();
     }
 
 
@@ -359,6 +362,7 @@ class SelenideTest extends TestCase
     public function testVisible_NotFoundElementAssertNot()
     {
             self::$wd->find(By::id('not-found-element'))
+                ->assert(Condition::size(0))
                 ->assertNot(Condition::visible());
     }
 
@@ -472,9 +476,10 @@ class SelenideTest extends TestCase
     public function testClickElement()
     {
 
-        self::$wd->findAll(By::withText('textTwo'))
+        self::$wd->find(By::withText('textTwo'))
             ->should(Condition::withText("textTwo"))
             ->shouldNot(Condition::withText("textOne"))
+            ->assert(Condition::size(1))
             ->click();
     }
 
@@ -484,6 +489,7 @@ class SelenideTest extends TestCase
         self::$wd->findAll(By::withText('textTwo'))
             ->should(Condition::withText("textTwo"))
             ->shouldNot(Condition::withText("textOne"))
+            ->assert(Condition::size(2))
             ->click();
     }
 

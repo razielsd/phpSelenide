@@ -49,11 +49,10 @@ class Selenide
      */
     public function find(By $locator)
     {
-        $selector = new Selector();
-        $selector->locator = $locator->asString();
-        $selector->type = Selector::TYPE_ELEMENT;
-        $collection = new ElementsCollection($this, [$selector]);
+        $selectorList = new SelectorList();
+        $collection = new ElementsCollection($this, $selectorList);
         $collection->description($this->description);
+        $collection->find($locator);
         $this->description = '';
         return $collection;
     }
@@ -67,14 +66,12 @@ class Selenide
      */
     public function findAll(By $locator)
     {
-        $selector = new Selector();
-        $selector->locator = $locator->asString();
-        $selector->type = Selector::TYPE_COLLECTION;
-        $collection = new ElementsCollection($this, [$selector]);
+        $selectorList = new SelectorList();
+        $collection = new ElementsCollection($this, $selectorList);
         $collection->description($this->description);
+        $collection->findAll($locator);
         $this->description = '';
         return $collection;
-
     }
 
 

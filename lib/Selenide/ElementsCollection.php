@@ -20,9 +20,11 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
      */
     protected $driver = null;
     /**
-     * @var Selector[]
+     * @var SelectorList
      */
     protected $selectorList = [];
+
+    protected $selectorMode = self::MODE_COLLECTION_ELEMENT;
 
     protected $description = '';
     protected $elementCache = null;
@@ -33,7 +35,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     protected $index = 0;
 
 
-    public function __construct(Selenide $selenide, array $selectorList)
+    public function __construct(Selenide $selenide, SelectorList $selectorList)
     {
         $this->selenide = $selenide;
         $this->driver = $selenide->getDriver();
@@ -63,10 +65,9 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     public function find(By $locator)
     {
         $this->clearCache();
-        $selector = new Selector();
-        $selector->locator = $locator;
-        $selector->type = Selector::TYPE_ELEMENT;
-        $this->selectorList[] = $selector;
+        $selector = new Selector_Locator($locator);
+        $this->selectorList->add($selector);
+        $this->selectorMode = self::MODE_SINGLE_ELEMENT;
         return $this;
     }
 
@@ -80,10 +81,9 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     public function findAll(By $locator)
     {
         $this->clearCache();
-        $selector = new Selector();
-        $selector->locator = $locator;
-        $selector->type = Selector::TYPE_COLLECTION;
-        $this->selectorList[] = $selector;
+        $selector = new Selector_Locator($locator);
+        $this->selectorList->add($selector);
+        $this->selectorMode = self::MODE_COLLECTION_ELEMENT;
         return $this;
     }
 
@@ -97,10 +97,8 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     public function should(Condition_Rule $condition)
     {
         $this->clearCache();
-        $selector = new Selector();
-        $selector->condition = $condition;
-        $selector->isPositive = true;
-        $this->selectorList[] = $selector;
+        $selector = new Selector_Condition($condition);
+        $this->selectorList->add($selector);
         return $this;
     }
 
@@ -114,10 +112,8 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
     public function shouldNot(Condition_Rule $condition)
     {
         $this->clearCache();
-        $selector = new Selector();
-        $selector->condition = $condition;
-        $selector->isPositive = false;
-        $this->selectorList[] = $selector;
+        $selector = new Selector_Condition($condition, false);
+        $this->selectorList->add($selector);
         return $this;
     }
 
@@ -407,7 +403,7 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
      */
     public function getLocator()
     {
-        return Util::selectorAsText($this->selectorList);
+        return $this->selectorList->getLocator();
     }
 
 
@@ -469,20 +465,8 @@ class ElementsCollection implements Iterator, Countable, ArrayAccess
 
     protected function prepareResult(array $result, $asArray = false)
     {
-        $mode = self::MODE_COLLECTION_ELEMENT;
-        foreach ($this->selectorList as $selector) {
-            switch ($selector->type) {
-                case Selector::TYPE_ELEMENT:
-                    $mode = self::MODE_SINGLE_ELEMENT;
-                    break;
-                case Selector::TYPE_COLLECTION:
-                    $mode = self::MODE_COLLECTION_ELEMENT;
-                    break;
-            }
-        }
-
-        if ($mode != self::MODE_COLLECTION_ELEMENT) {
-            $result = isset($result[0]) ? $result[0] : null;
+        if ($this->selectorMode == self::MODE_SINGLE_ELEMENT) {
+            $result = $result[0] ?? null;
             if ($asArray) {
                 $result = $result ? [$result] : [];
             }

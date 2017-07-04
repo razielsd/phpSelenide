@@ -93,10 +93,10 @@ class Driver
     }
 
 
-    protected function searchBySelectors(array $selectorList)
+    protected function searchBySelectors(SelectorList $selectorList)
     {
         $this->selenide->getReport()
-            ->addRootEvent('Search element: ' . Util::selectorAsText($selectorList));
+            ->addRootEvent('Search element: ' . $selectorList->getLocator());
         $resultList = [];
         $currentSelector = [];
         foreach ($selectorList as $index => $selector) {
@@ -130,18 +130,11 @@ class Driver
 
 
 
-    protected function searchFirstElement($selector)
+    protected function searchFirstElement(Selector_Locator $selector)
     {
         // @todo probable error: can't detect  bad locator
         try {
-            switch ($selector->type) {
-                case Selector::TYPE_ELEMENT:
-                case Selector::TYPE_COLLECTION:
-                    $resultList = $this->webDriver()->findAll($selector->locator);
-                    break;
-                default:
-                    throw new Exception('Logic error: unable search start from condition');
-            }
+            $resultList = $this->webDriver()->findAll($selector->locator);
         } catch (\WebDriver_Exception $e) {
             throw new Exception_ConditionMatchFailed('Find element failed, search restart');
         }
@@ -149,13 +142,12 @@ class Driver
     }
 
 
-    protected function searchFromSecondElement($resultList, $selector)
+    protected function searchFromSecondElement($resultList, Selector $selector)
     {
         // @todo probable error: can't detect  bad locator
         try {
             switch ($selector->type) {
-                case Selector::TYPE_ELEMENT:
-                case Selector::TYPE_COLLECTION:
+                case Selector::TYPE_LOCATOR:
                     $resultList = $this->searchChild($resultList, $selector);
                     break;
                 case Selector::TYPE_CONDITION:
@@ -173,23 +165,15 @@ class Driver
     }
 
 
-    protected function searchChild($elementList, $selector)
+    protected function searchChild($elementList, Selector_Locator $selector)
     {
         $this->selenide->getReport()->addChildEvent('Search all child');
         $resultList = [];
         /** @var \WebDriver_Element $element */
         foreach ($elementList as $element) {
             try {
-                $locator = $selector->locator->getChildLocator();
-                $nodeList = [];
-                if ($selector->type == Selector::TYPE_ELEMENT) {
-                    $element = $element->child($locator);
-                    if ($element) {
-                        $nodeList[] = $element;
-                    }
-                } else {
-                    $nodeList = $element->childAll($locator);
-                }
+                $locator = $selector->asString();
+                $nodeList = $element->childAll($locator);
                 foreach ($nodeList as $node) {
                     $resultList[] = $node;
                 }
@@ -201,9 +185,9 @@ class Driver
     }
 
 
-    protected function searchByCondition($elementList, Selector $selector)
+    protected function searchByCondition($elementList, Selector_Condition $selector)
     {
-        $resultList = $selector->condition->match($elementList, $selector->isPositive);
+        $resultList = $selector->getCondition()->match($elementList, $selector->isPositive());
         return $resultList;
     }
 

@@ -122,13 +122,13 @@ class By
                 break;
             case self::TYPE_TEXT:
                 $locator =
-                    'xpath=//*[normalize-space(.)=' . Util::escapeString($this->locator) .
-                    ' and not(.//*[normalize-space(.)=' . Util::escapeString($this->locator) . '])]';
+                    'xpath=//*[normalize-space(.)=' . $this->escapeString($this->locator) .
+                    ' and not(.//*[normalize-space(.)=' . $this->escapeString($this->locator) . '])]';
                 break;
             case self::TYPE_WITH_TEXT:
                 $locator =
-                    'xpath=//*[contains(normalize-space(.), ' . Util::escapeString($this->locator) .
-                    ') and not(.//*[contains(normalize-space(.), ' . Util::escapeString($this->locator) . ')])]';
+                    'xpath=//*[contains(normalize-space(.), ' . $this->escapeString($this->locator) .
+                    ') and not(.//*[contains(normalize-space(.), ' . $this->escapeString($this->locator) . ')])]';
                 break;
             case self::TYPE_CSS:
                 $locator = 'css=' . $this->locator;
@@ -143,7 +143,7 @@ class By
                 $locator = 'tag=' . $this->locator;
                 break;
             case self::TYPE_TITLE:
-                $locator = 'xpath=//*[@title=' . Util::escapeString($this->locator) . ']';
+                $locator = 'xpath=//*[@title=' . $this->escapeString($this->locator) . ']';
                 break;
         }
         return $locator;
@@ -159,13 +159,13 @@ class By
                 break;
             case self::TYPE_TEXT:
                 $locator =
-                    'xpath=descendant::*[normalize-space(.)=' . Util::escapeString($this->locator) .
-                    ' and not(.//*[normalize-space(.)=' . Util::escapeString($this->locator) . '])]';
+                    'xpath=descendant::*[normalize-space(.)=' . $this->escapeString($this->locator) .
+                    ' and not(.//*[normalize-space(.)=' . $this->escapeString($this->locator) . '])]';
                 break;
             case self::TYPE_WITH_TEXT:
                 $locator =
-                    'xpath=descendant::*[contains(normalize-space(.), ' . Util::escapeString($this->locator) .
-                    ') and not(.//*[contains(normalize-space(.), ' . Util::escapeString($this->locator) . ')])]';
+                    'xpath=descendant::*[contains(normalize-space(.), ' . $this->escapeString($this->locator) .
+                    ') and not(.//*[contains(normalize-space(.), ' . $this->escapeString($this->locator) . ')])]';
                 break;
             case self::TYPE_CSS:
                 $locator = 'css=' . $this->locator;
@@ -180,7 +180,7 @@ class By
                 $locator = 'tag=' . $this->locator;
                 break;
             case self::TYPE_TITLE:
-                $locator = 'xpath=descendant::*[@title=' . Util::escapeString($this->locator) . ']';
+                $locator = 'xpath=descendant::*[@title=' . $this->escapeString($this->locator) . ']';
                 break;
         }
         return $locator;
@@ -191,4 +191,49 @@ class By
     {
         return $this->asString();
     }
+
+
+    /**
+     * Convert strings with both quotes and ticks into a valid xpath component
+     *
+     * For example,
+     *
+     * <p>
+     *   {@code foo} will be converted to {@code "foo"},
+     * </p>
+     * <p>
+     *   {@code f"oo} will be converted to {@code 'f"oo'},
+     * </p>
+     * <p>
+     *   {@code foo'"bar} will be converted to {@code concat("foo'", '"', "bar")}
+     * </p>
+     *
+     * @param string $toEscape a text to escape quotes in, e.g. {@code "f'oo"}
+     * @return string the same text with escaped quoted, e.g. {@code "\"f'oo\""}
+     */
+    public static function escapeString(string $toEscape): string
+    {
+        if (mb_strpos($toEscape, '"') !== false && mb_strpos($toEscape, "'") !== false) {
+            $substringsWithoutDoubleQuotes = explode('"', $toEscape);
+
+            $quoted = [];
+            foreach ($substringsWithoutDoubleQuotes as $key => $substring) {
+                $quoted[] = '"' . $substring . '"';
+                if ($key == count($substringsWithoutDoubleQuotes) - 1) {
+                    break;
+                }
+                $quoted[] = "'\"'";
+            }
+            return 'concat(' . implode(", ", $quoted) . ')';
+        }
+
+        // Escape string with just a quote into being single quoted: f"oo -> 'f"oo'
+        if (mb_strpos($toEscape, '"') !== false) {
+            return "'" . $toEscape . "'";
+        }
+
+        // Otherwise return the quoted string
+        return '"' . $toEscape . '"';
+    }
+    
 }
