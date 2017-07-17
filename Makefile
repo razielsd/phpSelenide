@@ -23,7 +23,7 @@ stopselenium:
 
 test:
 	./vendor/phpunit/phpunit/phpunit -c ./phpunit.xml
-	./vendor/bin/test-reporter
+#	./vendor/bin/test-reporter
 
 fulltest:
 	@echo Downloading selenium...
